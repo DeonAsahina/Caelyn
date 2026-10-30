@@ -1,0 +1,164 @@
+slash: /timeout
+
+opsi:
+user - user - wajib
+duration - text - wajib
+reason - text
+
+code:
+$nomention
+
+$var[e.timeout;<:emoji_36:1474589286052663497>]
+$var[color;D21F3C]
+
+$if[$isBot[$message[user]]==true]
+$ephemeral
+- Timeout failed: you cannot apply it to me.
+- Bot cannot timeout other bot.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;moderatemembers]==false]
+$ephemeral
+You need permission `Timeout Members`.
+$stop
+$endif
+
+$if[$isTimedOut[$message[user]]]
+$ephemeral
+The user is currently in timeout.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+Timeout failed: you cannot apply it to me.
+$stop
+$endif
+
+$if[$message[user]==$authorID]
+$ephemeral
+You cannot timeout yourself.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+The server owner cannot be timeout.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user's role is higher than your.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user's role is higher than mine.
+$stop
+$endif
+
+$timeout[$message[1;duration];$findUser[$message[>;user]]]
+
+$title[$var[e.timeout] Timeout]
+$description[
+> **User:** <@$findUser[$message[>;user]]>
+> **Duration:** $message[1;duration]
+> **Reason:** $message[2;reason]
+]
+$addTimestamp
+$color[$var[color]]
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[e.timeout] Timeout;;> **User:** <@$findUser[$message[>;user]]>
+> **Duration:** $message[1;duration]
+> **Reason:** $message[2;reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+   $if[$getServerVar[embeD]==Enabled]
+   $try$sendEmbedMessage[$getServerVar[channelidVar];;$var[e.timeout] Timeout;;> **User:** <@$findUser[$message[>;user]]>
+> **Duration:** $message[1;duration]
+> **Reason:** $message[2;reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+   $endif
+
+slash: /untimeout
+
+opsi:
+user - user - wajib
+
+code:
+$nomention
+
+$var[e.untimeout;<:emoji_35:1474590525146271834>]
+$var[color;D21F3C]
+
+$if[$checkUserPerms[$authorID;moderatemembers]==false]
+$ephemeral
+You need permission `Timeout Members` to use this command.
+$stop
+$endif
+
+$if[$isBot[$message[user]]==true]
+$ephemeral
+Self-untimeout is not allowed.
+Bots cannot untimeout other bots.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+Self-untimeout is not allowed
+$stop
+$endif
+
+$if[$message[user]==$authorID]
+$ephemeral
+Untimeout failed: you can't use it on yourself.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+The server owner cannot be timeout.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user's role is higher than your.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user's role is higher than mine.
+$stop
+$endif
+
+$if[$isTimedOut[$message[user]]==false]
+$ephemeral
+Untimeout failed: user is not in timeout.
+$stop
+$endif
+
+$untimeout[$findUser[$message[>;user]]]
+
+$title[$var[e.untimeout] Untimeout]
+$description[
+> **User:** <@$findUser[$message[>;user]]>
+]
+$color[$var[color]]
+$addTimestamp
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[e.untimeout] Untimeout;;> **User:** <@$findUser[$message[>;user]]>;$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+$if[$getServerVar[embeD]==Enabled]
+   $try
+   $sendEmbedMessage[$getServerVar[channelidVar];;$var[e.untimeout] Untimeout;;> **User:** <@$findUser[$message[>;user]]>;$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+$endif
