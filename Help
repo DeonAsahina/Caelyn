@@ -1,0 +1,63 @@
+slash: /help
+prefix: c.help
+
+code:
+$nomention
+$ephemeral
+$title[Caelyn Help]
+$description[
+**Be Careful, Remember...your life belongs to this Queen.**
+
+> <:emoji_42:1528593436733608107> **Home**
+> <:emoji_43:1528654844251082843> **Moderator**
+]
+$newSelectMenu[HelpMenu;1;1;Select category]
+$addSelectMenuOption[HelpMenu;Home;Home;Main menu;;<:emoji_42:1528593436733608107>;]
+$addSelectMenuOption[HelpMenu;Moderator;Moderator;List all commands for moderators.;;<:emoji_43:1528654844251082843> ;]
+$addButton[no;https://discord.gg/hvwZCXWEnh;Server;link;no;<:emoji_44:1528656241155637318>]
+$addButton[no;$getBotInvite;Invite Me;link;no;<:emoji_45:1528657439438930010>]
+$color[FFFAFA]
+
+prefix: $onInteraction[HelpMenu]
+
+code:
+$nomention
+$var[color;D21F3C]
+
+$ephemeral
+$if[$message==Home]
+
+$title[Caelyn Help]
+$description[
+**Be Careful, Remember...your life belongs to this Queen.**
+
+> <:emoji_42:1528593436733608107> **Home**
+> <:emoji_43:1528654844251082843> **Moderator**
+]
+$color[$var[color]]
+$endif
+
+$if[$message==Moderator]
+$title[Moderator Commands]
+$description[
+> <:emoji_38:1370559373218414593>**kick**
+> *Remove a member from the server.*
+> <:emoji_46:1529327536125775872>**ban**
+> *Permanently block a member from the server.*
+> <:emoji_46:1529327536125775872>**unban**
+> *Unblock a member who was previously banned.*
+> <:emoji_46:1529327536125775872>**timeout**
+> *Temporarily mute a member.*
+> <:emoji_46:1529327536125775872>**untimeout**
+> *End a member's timeout status.*
+> <:emoji_46:1529327536125775872>**warn**
+> *Give a warning to a member for breaking the rules.*
+> <:emoji_46:1529327536125775872>**check-warn**
+> *View the list of warnings.*
+> <:emoji_46:1529327536125775872>**remove-warm**
+> *Remove a specific warning from the warning list.*
+> <:emoji_46:1529327536125775872>**warn-reset**
+> *Remove all warnings.*
+]
+$color[$var[color]]
+$endif
