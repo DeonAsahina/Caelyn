@@ -1,0 +1,9 @@
+command ini jika dilakukan oleh member, maka member akan otomatis di timeout oleh bot
+prefix: <@ID user>
+code:
+$nomention
+$suppressErrors[]
+
+$timeout[60;$authorID]
+$reply
+Don't mention the server owner!
