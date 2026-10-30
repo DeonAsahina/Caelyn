@@ -1,0 +1,17 @@
+command: /avatar
+prefix: c.avatar
+
+$nomention
+
+$if[$isSlash==true]
+$var[user;$findUser[$message[user]]]
+$else
+$var[user;$findUser[$message]]
+$endif
+
+$title[Avatar $nickname[$var[user]]]
+$description[
+$image[$userAvatar[$var[user]]?size=4096]
+]
+$color[87CEFA]
+$addTimestamp
