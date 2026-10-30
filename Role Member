@@ -1,0 +1,478 @@
+slash: /list role member
+opsi:
+role - role - wajib
+code:
+$nomention
+$onlyIf[$isSlash==true;]
+ 
+$c[ Visit -> https://dadocs.rickyjs.xyz/ for more information about API key ]
+ 
+$try
+  $onlyIf[$guildID!=;]
+$catch
+  $ephemeral
+  You can't use this command in DMs!
+  $stop
+$endtry
+ 
+$try
+  $onlyIf[$message[role]!=$guildID;]
+$catch
+  $ephemeral
+  Try another role other than `@everyone`
+  $stop
+$endtry
+ 
+$defer
+ 
+$var[guild-members-endpoint.version;release]
+ 
+$var[api-key;$getVar[ApiKey]]
+$var[bot-token;$getVar[BotToken]]
+ 
+$var[tick.emoji;✅]    
+$var[cross.emoji;❌]
+$var[loading.emoji;💫]
+$var[page.emoji;📝]
+ 
+$var[guild-id;$guildID]
+$var[author-id;$authorID]
+ 
+$var[first-page.arrow;<:emoji_45:1379423199003021312>]
+$var[last-page.arrow;<:emoji_48:1379423272982020146>]
+$var[next-page.arrow;<:emoji_47:1379423248231698532>]
+$var[prev-page.arrow;<:emoji_46:1379423227419562045>]
+ 
+$var[arrow.buttons.style;secondary]
+$var[page.button.style;primary]
+ 
+$var[\n;$url[decode;%0A]]
+$var[\n.space;$url[decode;%0A+]]
+ 
+$httpAddHeader[apikey;$var[api-key]]
+$httpAddHeader[bot-token;$var[bot-token]]
+$httpAddHeader[guild-id;$var[guild-id]]
+$httpAddHeader[exclude;nick,user<username,global_name>]
+ $httpGet[https://bdfddata.rickyjs.xyz/$var[guild-members-endpoint.version]/guild/members]
+ 
+$var[role.id;$message[role]]
+$var[role.color;$getRoleColor[$var[role.id]]]
+ 
+$async[fetch_role_icon]
+  $httpAddHeader[role;$var[role.id]]
+  $httpGet[https://bdfddata.rickyjs.xyz/release/guild/roles]
+  $jsonParse[$httpResult]
+ 
+  $var[role.icon;$json[details;icon]]
+  $var[isBoosterRole;$jsonExists[details;tags;premium_subscriber]]
+$endasync $await[fetch_role_icon]
+ 
+$textSplit[$httpResult;$var[role.id]]
+ 
+$var[role.members.count;$sub[$getTextSplitLength;1]]
+ 
+$if[$var[role.members.count]==0]
+    $description[No members found in <@&$var[role.id]> role]
+    $color[$var[role.color]]
+$else
+    $async[page_math]
+      $enableDecimals[true]
+      $var[div;$divide[$var[role.members.count];10]]
+ 
+      $if[$checkContains[$var[div];.]==true]
+          $textSplit[$var[div];.]
+          $var[total.pages;$sum[$splitText[1];1]]
+      $else
+          $var[total.pages;$var[div]]
+      $endif
+    $endasync $await[page_math]
+ 
+    $var[x;2]
+    $var[q;0]
+ 
+    $if[$var[isBoosterRole]==true]
+        $var[code;%{DOL}%async[boost-since-%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%splitText[%{DOL}%sub[%{DOL}%var[x\]\;1\]\]\;"premium_since":"\]%{DOL}%textSplit[%{DOL}%splitText[2\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%if[%{DOL}%await[boost-since-%{DOL}%var[x\]\]!=\]%{DOL}%jsonSetString[%{DOL}%await[%{DOL}%var[x\]\]-timestamps\;boost\;%{DOL}%await[boost-since-%{DOL}%var[x\]\]\]%{DOL}%endif%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+    $else
+        $var[code;%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+    $endif
+ 
+    $eval[$repeatMessage[10;$var[code]]]
+ 
+    $if[$var[isBoosterRole]==true]
+        $var[show.members;$eval[1. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# **Boosted:** <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)%{DOL}%endif %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# **Boosted:** <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)%{DOL}%endif]]
+    $else
+        $var[show.members;$eval[1. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])`]]
+    $endif
+ 
+    $description[## Role Members of <@&$var[role.id]>$var[\n]-# There are $var[role.members.count] members;1]
+    $thumbnail[$var[role.icon];1]
+    $footer[Role ID: $var[role.id];1]
+    $description[$var[show.members];2]
+    $footer[Page 1/$var[total.pages];2]
+ 
+    $color[$var[role.color];1]
+    $color[$var[role.color];2]
+ 
+    $addButton[no;roleMembers-$var[author-id]-$var[role.id]-FirstPage;;$var[arrow.buttons.style];true;$var[first-page.arrow]]
+    $addButton[no;roleMembers-$var[author-id]-$var[role.id]-PrevPage;;$var[arrow.buttons.style];true;$var[prev-page.arrow]]
+    $addButton[no;roleMembers-$var[author-id]-$var[role.id]-NextPage;;$var[arrow.buttons.style];$checkCondition[$var[total.pages]==1];$var[next-page.arrow]]
+    $addButton[no;roleMembers-$var[author-id]-$var[role.id]-LastPage;;$var[arrow.buttons.style];$checkCondition[$var[total.pages]==1];$var[last-page.arrow]]
+    $addButton[no;roleMembers.pageModal-$var[author-id]-$var[role.id];;$var[page.button.style];$checkCondition[$var[total.pages]==1];$var[page.emoji]]
+ 
+    $var[i;0]
+    $var[code;%{DOL}%addSelectMenuOption[RoleMembersList.Menu\;%{DOL}%sum[%{DOL}%var[i\]\;1\]. %{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[i\]\]\]\;roleMemberInfo-%{DOL}%authorID-%{DOL}%json[role-members\;%{DOL}%var[i\]\]-%{DOL}%var[role.id\]\;\;\;\;\]%{DOL}%var[i\;%{DOL}%calculate[%{DOL}%var[i\] + 1\]\]]
+ 
+    $newSelectMenu[RoleMembersList.Menu;1;1;Role Members (Page 1)]
+    $eval[$repeatMessage[$jsonArrayCount[role-members];$var[code]]]
+$endif
+
+prefix: $onInteraction
+code:
+$c[LANJUTAN COMMAND MEMBER ROLE LIST]
+
+$nomention
+$botListHide
+ 
+$c[ Visit -> https://dadocs.rickyjs.xyz/ for more information about API key ]
+ 
+$var[guild-members-endpoint.version;release]
+ 
+$var[tick.emoji;✅]    
+$var[cross.emoji;❌]
+$var[loading.emoji;💫]
+$var[page.emoji;📝]
+ 
+$var[api-key;$getVar[ApiKey]]
+$var[bot-token;$getVar[BotToken]] 
+ 
+$var[first-page.arrow;<:emoji_45:1379423199003021312>]
+$var[last-page.arrow;<:emoji_48:1379423272982020146>]
+$var[next-page.arrow;<:emoji_47:1379423248231698532>]
+$var[prev-page.arrow;<:emoji_46:1379423227419562045>]
+$var[left-green.arrow;<:LeftGreenArrowPixel:1190492988053401611>]
+ 
+$var[default.color;afeeed]
+$var[arrow.buttons.style;secondary]
+$var[page.button.style;primary]
+ 
+$var[\n;$url[decode;%0A]]
+$var[\n.space;$url[decode;%0A+]]
+ 
+$textSplit[$customID;-]
+ 
+$if[$splitText[1]==roleMembers]
+    $if[$splitText[2]==$authorID]
+        $var[role.id;$splitText[3]]
+ 
+        $if[$roleExists[$var[role.id]]==false]
+            $ephemeral
+            $removeAllComponents
+            $var[cross.emoji] This role has been deleted!
+        $else                       
+            $var[chan-id;$channelID]
+            $var[msg-id;$messageID]
+            $var[guild-id;$guildID]
+            $var[author-id;$authorID]         
+ 
+            $if[$splitText[4]==FirstPage]
+                $var[page.type;First Page]
+            $elseif[$splitText[4]==PrevPage]
+                $var[page.type;Previous Page]
+            $elseif[$splitText[4]==NextPage]
+                $var[page.type;Next Page]
+            $else
+                $var[page.type;Last Page]
+            $endif
+ 
+            $var[footer.data.2;$getEmbedData[$var[chan-id];$var[msg-id];2;footer]]
+            $editMessage[$var[chan-id];$var[msg-id];;;Loading $var[page.type]...$var[loading.emoji];$getEmbedData[$var[chan-id];$var[msg-id];1;color];$var[footer.data.2]]
+ 
+            $async[disable_components]
+              $removeAllComponents[$var[msg-id]]
+              $addButton[no;rm-firstpage;;$var[arrow.buttons.style];true;$var[first-page.arrow];$var[msg-id]]
+              $addButton[no;rm-prevpage;;$var[arrow.buttons.style];true;$var[prev-page.arrow];$var[msg-id]]
+              $addButton[no;rm-nextpage;;$var[arrow.buttons.style];true;$var[next-page.arrow];$var[msg-id]]
+              $addButton[no;rm-lastpage;;$var[arrow.buttons.style];true;$var[last-page.arrow];$var[msg-id]]
+              $addButton[no;rm-custompage;;$var[page.button.style];true;$var[page.emoji];$var[msg-id]]
+ 
+              $textSplit[$replaceText[$var[footer.data.2];Page;];/]
+              $var[current.page.menu;$splitText[1]]
+ 
+              $newSelectMenu[roleMemslist.menu;1;1;Loading Members...;$var[msg-id]]
+              $addSelectMenuOption[roleMemslist.menu;Role Members (Page $var[current.page.menu]);owo-OWO;;true;;$var[msg-id]]           
+            $endasync $await[disable_components]
+ 
+            $defer
+            $httpAddHeader[apikey;$var[api-key]]
+            $httpAddHeader[bot-token;$var[bot-token]]
+            $httpAddHeader[guild-id;$var[guild-id]]
+            $httpAddHeader[exclude;nick,user<username,global_name>]
+            $httpGet[https://bdfddata.rickyjs.xyz/$var[guild-members-endpoint.version]/guild/members]
+ 
+            $async[fetch_role_icon]
+              $httpAddHeader[role;$var[role.id]]
+              $httpGet[https://bdfddata.rickyjs.xyz/release/guild/roles]
+              $jsonParse[$httpResult]
+ 
+              $var[role.icon;$json[details;icon]]
+              $var[isBoosterRole;$jsonExists[details;tags;premium_subscriber]]
+            $endasync $await[fetch_role_icon]
+ 
+            $async[roleMembersCount]
+              $textSplit[$httpResult;$var[role.id]]
+ 
+              $var[role.members.count;$sub[$getTextSplitLength;1]]
+              $var[json.body;$joinSplitText[$var[role.id]]]
+            $endasync $await[roleMembersCount]
+ 
+            $var[role.color;$getRoleColor[$var[role.id]]]           
+ 
+            $if[$var[role.members.count]==0]
+                $ephemeral
+                $removeAllComponents
+                $description[No members found in <@&$var[role.id]> role]
+                $color[$var[role.color]]
+            $else
+                $async[page_math]
+                   $if[$checkContains[$getEmbedData[$var[chan-id];$var[msg-id];1;footer];Role]==true]
+                       $var[footer.data.pg;$getEmbedData[$var[chan-id];$var[msg-id];2;footer]]
+                   $else
+                       $var[footer.data.pg;$getEmbedData[$var[chan-id];$var[msg-id];1;footer]]                    
+                   $endif
+ 
+                   $textSplit[$replaceText[$var[footer.data.pg];Page;];/]
+                   $var[current.page;$splitText[1]]
+ 
+                   $enableDecimals[true]
+                   $var[div;$divide[$var[role.members.count];10]]
+ 
+                   $if[$checkContains[$var[div];.]==true]
+                       $textSplit[$var[div];.]
+                       $var[total.pages;$sum[$splitText[1];1]]
+                   $else
+                       $var[total.pages;$var[div]]
+                   $endif
+                $endasync $await[page_math]
+ 
+                $if[$splitText[4]==FirstPage]
+                    $var[updated.page;1]
+                $elseif[$splitText[4]==PrevPage]
+                    $var[updated.page;$sub[$var[current.page];1]]
+                $elseif[$splitText[4]==NextPage]
+                    $var[updated.page;$sum[$var[current.page];1]]
+                $else
+                    $var[updated.page;$var[total.pages]]
+                $endif
+ 
+                $if[$or[$var[updated.page]>$var[total.pages];$var[updated.page]<=0]==true]
+                    $var[updated.page;$var[total.pages]]
+                $endif
+ 
+                $var[final.element;$multi[$var[updated.page];10]]
+                $var[x;$sum[$sub[$var[final.element];9];1]]
+                $var[x.uwu;$sub[$var[x];1]]
+                $var[q;0]
+ 
+                $async[loops]
+                   $textSplit[$var[json.body];$var[role.id]]                  
+ 
+                   $if[$var[isBoosterRole]==true]
+                       $var[code;%{DOL}%async[boost-since-%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%splitText[%{DOL}%sub[%{DOL}%var[x\]\;1\]\]\;"premium_since":"\]%{DOL}%textSplit[%{DOL}%splitText[2\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%if[%{DOL}%await[boost-since-%{DOL}%var[x\]\]!=\]%{DOL}%jsonSetString[%{DOL}%await[%{DOL}%var[x\]\]-timestamps\;boost\;%{DOL}%await[boost-since-%{DOL}%var[x\]\]\]%{DOL}%endif%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+                   $else
+                       $var[code;%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+                         $endif
+ 
+                   $eval[$repeatMessage[10;$var[code]]]                               
+ 
+                   $if[$var[isBoosterRole]==true]
+                       $var[show.members;$eval[$var[x.uwu]. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# Boosting: <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)**%{DOL}%endif %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# Boosted:** <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)**%{DOL}%endif]]
+                   $else
+                       $var[show.members;$eval[$var[x.uwu]. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])`]]
+                   $endif
+ 
+                   $var[role-members-json;"$jsonJoinArray[role-members;", "]"]                      
+                $endasync $await[loops]
+ 
+                $description[## Role Members of <@&$var[role.id]>$var[\n]-# There are $var[role.members.count] members;1]
+                $thumbnail[$var[role.icon];1]
+                $footer[Role ID: $var[role.id];1]
+                $description[$var[show.members];2]
+                $footer[Page $var[updated.page]/$var[total.pages];2]
+ 
+                $color[$var[role.color];1]
+                $color[$var[role.color];2]
+ 
+                $removeAllComponents
+                $addButton[no;roleMembers-$var[author-id]-$var[role.id]-FirstPage;;$var[arrow.buttons.style];$checkCondition[$var[updated.page]==1];$var[first-page.arrow]]
+                $addButton[no;roleMembers-$var[author-id]-$var[role.id]-PrevPage;;$var[arrow.buttons.style];$checkCondition[$var[updated.page]==1];$var[prev-page.arrow]]
+                $addButton[no;roleMembers-$var[author-id]-$var[role.id]-NextPage;;$var[arrow.buttons.style];$checkCondition[$var[updated.page]==$var[total.pages]];$var[next-page.arrow]]
+                $addButton[no;roleMembers-$var[author-id]-$var[role.id]-LastPage;;$var[arrow.buttons.style];$checkCondition[$var[updated.page]==$var[total.pages]];$var[last-page.arrow]]
+                $addButton[no;roleMembers.pageModal-$var[author-id]-$var[role.id];;$var[page.button.style];$checkCondition[$var[total.pages]==1];$var[page.emoji]]
+ 
+                $jsonParse[{ "role-members": [ $var[role-members-json] \] }]
+                $var[i;0]
+                $var[code;%{DOL}%addSelectMenuOption[RoleMembersList.Menu\;%{DOL}%var[x.uwu\]. %{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[i\]\]\]\;roleMemberInfo-%{DOL}%authorID-%{DOL}%json[role-members\;%{DOL}%var[i\]\]-%{DOL}%var[role.id\]\;\;\;\;\]%{DOL}%var[i\;%{DOL}%calculate[%{DOL}%var[i\] + 1\]\]%{DOL}%var[x.uwu\;%{DOL}%calculate[%{DOL}%var[x.uwu\] + 1\]\]]
+ 
+                $newSelectMenu[RoleMembersList.Menu;1;1;Role Members (Page $var[updated.page])]
+                $eval[$repeatMessage[$jsonArrayCount[role-members];$var[code]]]
+ 
+            $endif $c[ // <- Role Members Count 0 Check End ]
+        $endif $c[ // <- Role Exists Check End ]
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif
+$endif
+ 
+$if[$splitText[1]==roleMembers.pageModal]
+    $if[$splitText[2]==$authorID]
+        $newModal[roleMembers.pageInput-$splitText[3];Role Members List]
+        $addTextInput[userPageInput;short;Page Number;1;10;true;;7]
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif
+$endif
+ 
+$if[$splitText[1]==roleMembers.pageInput]
+    $ephemeral
+    $removeAllComponents
+    $var[role.id;$splitText[2]]
+ 
+    $if[$roleExists[$var[role.id]]==false]
+        $var[cross.emoji] This Role has been deleted
+    $else
+        $var[page-input;$input[userPageInput]]
+        $var[chan-id;$channelID]
+        $var[msg-id;$messageID]
+        $var[guild-id;$guildID]
+        $var[author-id;$authorID]
+ 
+        $var[footer.data.2;$getEmbedData[$var[chan-id];$var[msg-id];2;footer]]
+ 
+        $async[disable_buttons]          
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-FirstPage;;$var[arrow.buttons.style];true;$var[first-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-PrevPage;;$var[arrow.buttons.style];true;$var[prev-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-NextPage;;$var[arrow.buttons.style];true;$var[next-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-LastPage;;$var[arrow.buttons.style];true;$var[last-page.arrow];$var[msg-id]]
+           $editButton[roleMembers.pageModal-$var[author-id]-$var[role.id];Loading Page...;$var[page.button.style];true;$var[loading.emoji];$var[msg-id]]         
+        $endasync $await[disable_buttons]
+ 
+        $defer
+        $httpAddHeader[apikey;$var[api-key]]
+        $httpAddHeader[bot-token;$var[bot-token]]
+        $httpAddHeader[guild-id;$var[guild-id]]
+        $httpAddHeader[exclude;nick,user<username,global_name>]
+        $httpGet[https://bdfddata.rickyjs.xyz/$var[guild-members-endpoint.version]/guild/members]
+ 
+        $textSplit[$httpResult;$var[role.id]]
+        $var[role.members.count;$sub[$getTextSplitLength;1]]
+        $var[role.color;$getRoleColor[$var[role.id]]]
+ 
+        $async[fetch_role_icon]
+          $httpAddHeader[role;$var[role.id]]
+          $httpGet[https://bdfddata.rickyjs.xyz/release/guild/roles]
+          $jsonParse[$httpResult]
+ 
+          $var[isBoosterRole;$jsonExists[details;tags;premium_subscriber]]
+        $endasync $await[fetch_role_icon]
+ 
+        $async[page_math]
+           $textSplit[$replaceText[$var[footer.data.2];Page;];/]
+           $var[current.page;$splitText[1]]
+ 
+           $enableDecimals[true]
+           $var[div;$divide[$var[role.members.count];10]]
+ 
+           $if[$checkContains[$var[div];.]==true]
+               $textSplit[$var[div];.]
+               $var[total.pages;$sum[$splitText[1];1]]
+           $else
+               $var[total.pages;$var[div]]
+           $endif
+        $endasync $await[page_math]
+ 
+        $if[$isNumber[$var[page-input]]==false]
+            $var[updated.page;1]
+        $else
+            $var[updated.page;$round[$var[page-input]]]
+        $endif
+ 
+        $if[$or[$var[updated.page]>$var[total.pages];$var[updated.page]<=0]==true]
+            $var[updated.page;$var[total.pages]]
+        $endif       
+ 
+        $var[final.element;$multi[$var[updated.page];10]]
+        $var[x;$sum[$sub[$var[final.element];9];1]]
+        $var[x.uwu;$sub[$var[x];1]]
+        $var[q;0]
+ 
+        $if[$var[isBoosterRole]==true]
+            $var[code;%{DOL}%async[boost-since-%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%splitText[%{DOL}%sub[%{DOL}%var[x\]\;1\]\]\;"premium_since":"\]%{DOL}%textSplit[%{DOL}%splitText[2\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%if[%{DOL}%await[boost-since-%{DOL}%var[x\]\]!=\]%{DOL}%jsonSetString[%{DOL}%await[%{DOL}%var[x\]\]-timestamps\;boost\;%{DOL}%await[boost-since-%{DOL}%var[x\]\]\]%{DOL}%endif%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+        $else
+            $var[code;%{DOL}%async[%{DOL}%var[x\]\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[%{DOL}%var[x\]\]\;2000\;\]\;"user":{"id":"\]%{DOL}%textSplit[%{DOL}%cropText[%{DOL}%splitText[2\]\;100\;\]\;"\]%{DOL}%splitText[1\]%{DOL}%endasync%{DOL}%if[%{DOL}%await[%{DOL}%var[x\]\]!=\]%{DOL}%jsonArrayAppend[role-members\;%{DOL}%await[%{DOL}%var[x\]\]\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[x\;%{DOL}%calculate[%{DOL}%var[x\]+1\]\]]
+        $endif
+ 
+        $eval[$repeatMessage[10;$var[code]]]
+ 
+        $if[$var[isBoosterRole]==true]
+            $var[show.members;$eval[$var[x.uwu]. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# **Boosted:** <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)%{DOL}%endif %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%if[%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]!=\]%{DOL}%var[\n.space\]- -# **Boosting:** <t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]> (<t:%{DOL}%json[%{DOL}%json[role-members\;%{DOL}%var[q\]\]-timestamps\;boost\]:R>)%{DOL}%endif]]
+        $else
+            $var[show.members;$eval[$var[x.uwu]. <@$jsonJoinArray[role-members;> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])` %{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\]+1\]\]%{DOL}%var[\n\]- <@]> `(@%{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[q\]\]\])`]]
+        $endif 
+ 
+        $description[$var[show.members]]
+        $footer[Page $var[updated.page]]
+        $color[$var[role.color]]
+ 
+        $async[enable_buttons]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-FirstPage;;$var[arrow.buttons.style];$checkCondition[$var[current.page]==1];$var[first-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-PrevPage;;$var[arrow.buttons.style];$checkCondition[$var[current.page]==1];$var[prev-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-NextPage;;$var[arrow.buttons.style];$checkCondition[$var[current.page]==$var[total.pages]];$var[next-page.arrow];$var[msg-id]]
+           $editButton[roleMembers-$var[author-id]-$var[role.id]-LastPage;;$var[arrow.buttons.style];$checkCondition[$var[current.page]==$var[total.pages]];$var[last-page.arrow];$var[msg-id]]
+           $editButton[roleMembers.pageModal-$var[author-id]-$var[role.id];;$var[page.button.style];$checkCondition[$var[total.pages]==1];$var[page.emoji];$var[msg-id]]         
+        $endasync $await[enable_buttons]
+ 
+        $var[i;0]
+        $var[code;%{DOL}%addSelectMenuOption[RoleMembersList.Menu\;%{DOL}%var[x.uwu\]. %{DOL}%username[%{DOL}%json[role-members\;%{DOL}%var[i\]\]\]\;roleMemberInfo-%{DOL}%authorID-%{DOL}%json[role-members\;%{DOL}%var[i\]\]-%{DOL}%var[role.id\]\;\;\;\;\]%{DOL}%var[i\;%{DOL}%calculate[%{DOL}%var[i\] + 1\]\]%{DOL}%var[x.uwu\;%{DOL}%calculate[%{DOL}%var[x.uwu\] + 1\]\]]
+ 
+        $newSelectMenu[RoleMembersList.Menu;1;1;Role Members]
+        $eval[$repeatMessage[$jsonArrayCount[role-members];$var[code]]]
+    $endif
+$endif
+ 
+$if[$splitText[1]==roleUser.avatars]
+    $var[user;$splitText[2]]
+ 
+    $if[$findUser[$var[user];no]==]
+        $ephemeral
+        $removeAllComponents
+        $var[cross.emoji] This user isn't in this server anymore!
+    $else
+        $if[$userBannerColor[$var[user]]==]
+            $var[color;$var[default.color]]
+        $else
+            $var[color;$userBannerColor[$var[user]]]
+        $endif
+ 
+        $var[user.name;$username[$var[user]]]
+        $var[user.avatar;$userAvatar[$var[user]]]
+        $var[user.serverAvatar;$userServerAvatar[$var[user]]]
+ 
+        $title[$var[user.name]'s Default Avatar]
+        $image[$var[user.avatar]?size=4096]
+        $color[$var[color]]
+ 
+        $if[$var[user.avatar]!=$var[user.serverAvatar]]
+            $image[$var[user.serverAvatar]?size=4096;2]
+        $else
+            $description[User does not have a server avatar.;2]
+        $endif
+ 
+        $title[$var[user.name]'s Server Avatar;2]
+        $color[$var[color];2]
+ 
+        $editButton[roleUser.avatars-$var[user];Avatars;primary;true]
+        $editButton[roleUser.banners-$var[user];
