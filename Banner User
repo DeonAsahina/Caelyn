@@ -1,0 +1,36 @@
+slash: /banner user
+
+opsi:
+user - user - wajib
+
+code:
+$nomention
+$color[6495ED]
+
+$try
+ $if[$message[user]==]
+ $var[u;$authorID]
+ $else
+ $var[u;$message[user]]
+ $endif
+
+ $if[$userBanner[$var[u]]==]
+ $httpGet[https://japi.rest/discord/v1/user/$var[u]]
+ $if[$httpResult[data;banner_color]==]
+ $description[**User <@$var[u]> doesn’t have a banner.**]
+ $else
+ $image[https://dummyimage.com/400x150/$httpResult[data;banner_color]/$httpResult[data;banner_color]]
+ $description[**User <@$var[u]> has a banner with color $httpResult[data;banner_color].**]
+ $endif
+ $else
+ $description[**User <@$var[u]> banner image.**]
+ $image[$userBanner[$var[u]]?size=2048]
+ $endif
+$catch
+ $description[An error occured.]
+ $addField[**Datas**;>>> **Source:** `$error[source]`
+**Message:** `$error[message]`
+**Function:** `$error[command]`;no]
+ $footerIcon[$serverIcon[$guildID]]
+ $footer[Error at the line $error[row], $error[column] chars.]
+$endtry
