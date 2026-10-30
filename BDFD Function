@@ -1,0 +1,524 @@
+• prefix: c.bdfdfunction
+
+code:
+$nomention
+
+$title[BDFD Functions/Callbacks]
+$description[Use **Search** button below to search for any/every bdfd function available in the [BDFD\](https://botdesignerdiscord.com/) application, or the **Function/Callback List** button to list all the functions/callbacks in bdfd.]
+$color[#d2042d]                 $c[Change the color of the embed]
+
+$addButton[no;bdfd-$authorID;Search;secondary;no;]
+$addButton[no;function-bdfd-list-$authorID;Function List;secondary;no;]
+$addButton[no;callback-bdfd-list-$authorID;Callback List;secondary;no;]
+
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆ prefix: $onInteraction[bdfd-modal]
+code:
+$var[color;#d2042d]                $c[Change the color of the embeds]
+
+$nomention
+$ephemeral
+$suppressErrors[The function/callback doesn't exist or invalid arguments.
+Example Usage:
+`%{DOL}%addButton` :x:
+`%{DOL}%addButton[\]` :white_check_mark: ]
+
+$if[$checkContains[$input[bdfdInput1];%{DOL}%awaitedCommand;%{DOL}%awaitedCommandError;%{DOL}%onJoined;%{DOL}%onLeave;%{DOL}%onBanAdd;%{DOL}%onBanRemove;%{DOL}%onMessageDelete;%{DOL}%onInteraction[\];%{DOL}%onInteraction;%{DOL}%alwaysReply;%{DOL}%reaction;%{DOL}%messageContains]==true]
+$httpGet[https://botdesignerdiscord.com/public/api/callback/$input[bdfdInput1]]
+
+$var[cmd;$replaceText[$replaceText[$replaceText[$input[bdfdInput1];%{DOL}%;];[;];\];]]
+$if[$httpResult[is_premium]==false]
+$var[link;https://nilpointer-software.github.io/bdfd-wiki/nightly/callbacks/$var[cmd].html]
+$else
+$var[link;https://nilpointer-software.github.io/bdfd-wiki/nightly/premium/$var[cmd].html]
+$endif
+
+$title[BDFD Callback Searcher]
+$description[>>> **Tag**: ```$httpResult[name]```
+**Description**: $httpResult[description]
+**Intents**: $httpResult[intents]
+**Premium**: $httpResult[is_premium]]
+$color[$var[color]]  
+$addButton[no;$var[link];Wiki;link;no;]
+$if[$httpResult[arguments;0;name]!=]
+$addField[$httpResult[arguments;0;name];
+> Type: $httpResult[arguments;0;type]
+> Required: $httpResult[arguments;0;required]
+> Empty: false
+;yes]$endif
+
+$if[$httpResult[arguments;1;name]!=]
+$addField[$httpResult[arguments;1;name];
+> Type: $httpResult[arguments;1;type]
+> Required: $httpResult[arguments;1;required]
+> Empty: false
+;yes]$endif
+
+$if[$httpResult[arguments;2;name]!=]
+$addField[$httpResult[arguments;2;name];
+> Type: $httpResult[arguments;2;type]
+> Required: $httpResult[arguments;2;required]
+> Empty: false
+;yes]$endif
+
+$if[$httpResult[arguments;3;name]!=]
+$addField[$httpResult[arguments;3;name];
+> Type: $httpResult[arguments;3;type]
+> Required: $httpResult[arguments;3;required]
+> Empty: false
+;yes]$endif
+
+$if[$httpResult[arguments;4;name]!=]
+$addField[$httpResult[arguments;4;name];
+> Type: $httpResult[arguments;4;type]
+> Required: $httpResult[arguments;4;required]
+> Empty: false
+;yes]$endif
+
+$if[$httpResult[arguments;5;name]!=]
+$addField[$httpResult[arguments;5;name];
+> Type: $httpResult[arguments;5;type]
+> Required: $httpResult[arguments;5;required]
+> Empty: false
+;yes]$endif
+
+$else
+$httpGet[https://botdesignerdiscord.com/public/api/function/$input[bdfdInput1]]
+
+$var[cmd;$replaceText[$replaceText[$replaceText[$input[bdfdInput1];%{DOL}%;];[;];\];]]
+$if[$httpResult[premium]==false]
+$var[link;https://nilpointer-software.github.io/bdfd-wiki/nightly/bdscript/$var[cmd].html]
+$else
+$var[link;https://nilpointer-software.github.io/bdfd-wiki/nightly/premium/$var[cmd].html]
+$endif
+
+$title[BDFD Function Searcher]
+$description[>>> **Tag**: ```$httpResult[tag]```
+**Description**: $httpResult[shortDescription]
+**Intents**: $httpResult[intents]
+**Premium**: $httpResult[premium]]
+$color[$var[color]] 
+$addButton[no;$var[link];Wiki;link;no;]
+$if[$httpResult[arguments;0;name]!=]
+$addField[$httpResult[arguments;0;name];
+> Type: $httpResult[arguments;0;type]
+> Required: $httpResult[arguments;0;required]
+> Empty: $httpResult[arguments;0;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;1;name]!=]
+$addField[$httpResult[arguments;1;name];
+> Type: $httpResult[arguments;1;type]
+> Required: $httpResult[arguments;1;required]
+> Empty: $httpResult[arguments;1;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;2;name]!=]
+$addField[$httpResult[arguments;2;name];
+> Type: $httpResult[arguments;2;type]
+> Required: $httpResult[arguments;2;required]
+> Empty: $httpResult[arguments;2;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;3;name]!=]
+$addField[$httpResult[arguments;3;name];
+> Type: $httpResult[arguments;3;type]
+> Required: $httpResult[arguments;3;required]
+> Empty: $httpResult[arguments;3;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;4;name]!=]
+$addField[$httpResult[arguments;4;name];
+> Type: $httpResult[arguments;4;type]
+> Required: $httpResult[arguments;4;required]
+> Empty: $httpResult[arguments;4;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;5;name]!=]
+$addField[$httpResult[arguments;5;name];
+> Type: $httpResult[arguments;5;type]
+> Required: $httpResult[arguments;5;required]
+> Empty: $httpResult[arguments;5;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;6;name]!=]
+$addField[$httpResult[arguments;6;name];
+> Type: $httpResult[arguments;6;type]
+> Required: $httpResult[arguments;6;required]
+> Empty: $httpResult[arguments;6;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;7;name]!=]
+$addField[$httpResult[arguments;7;name];
+> Type: $httpResult[arguments;7;type]
+> Required: $httpResult[arguments;7;required]
+> Empty: $httpResult[arguments;7;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;8;name]!=]
+$addField[$httpResult[arguments;8;name];
+> Type: $httpResult[arguments;8;type]
+> Required: $httpResult[arguments;8;required]
+> Empty: $httpResult[arguments;8;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;9;name]!=]
+$addField[$httpResult[arguments;9;name];
+> Type: $httpResult[arguments;9;type]
+> Required: $httpResult[arguments;9;required]
+> Empty: $httpResult[arguments;9;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;10;name]!=]
+$addField[$httpResult[arguments;10;name];
+> Type: $httpResult[arguments;10;type]
+> Required: $httpResult[arguments;10;required]
+> Empty: $httpResult[arguments;10;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;11;name]!=]
+$addField[$httpResult[arguments;11;name];
+> Type: $httpResult[arguments;11;type]
+> Required: $httpResult[arguments;11;required]
+> Empty: $httpResult[arguments;11;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;12;name]!=]
+$addField[$httpResult[arguments;12;name];
+> Type: $httpResult[arguments;12;type]
+> Required: $httpResult[arguments;12;required]
+> Empty: $httpResult[arguments;12;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;13;name]!=]
+$addField[$httpResult[arguments;13;name];
+> Type: $httpResult[arguments;13;type]
+> Required: $httpResult[arguments;13;required]
+> Empty: $httpResult[arguments;13;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;14;name]!=]
+$addField[$httpResult[arguments;14;name];
+> Type: $httpResult[arguments;14;type]
+> Required: $httpResult[arguments;14;required]
+> Empty: $httpResult[arguments;14;empty]
+;yes]$endif
+
+$if[$httpResult[arguments;15;name]!=]
+$addField[$httpResult[arguments;15;name];
+> Type: $httpResult[arguments;15;type]
+> Required: $httpResult[arguments;15;required]
+> Empty: $httpResult[arguments;15;empty]
+;yes]$endif
+
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆ prefix: $onInteraction
+$var[color;#d2042d]                $c[Change the color of the embeds]
+
+$nomention
+$if[$customID==bdfd-$authorID]
+$ephemeral
+$newModal[bdfd-modal;BDFD Function Searcher]
+$addTextInput[bdfdInput1;short;Function/Callback;3;50;yes;;Example: %{DOL}%addButton[\], %{DOL}%sendEmbedMessage[\]]
+$endif
+
+$if[$customID==callback-bdfd-list-$authorID]
+$ephemeral
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/callback_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[11;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[1]%{DOL}%onInteraction]
+$title[BDFD Callback List]
+$description[$var[1]]
+$color[$var[color]]
+$endif
+
+$if[$customID==function-bdfd-list-$authorID]
+$ephemeral
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[31;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[1]]
+$title[BDFD Function List  (Page 1)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 1/16]  
+$addButton[no;more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==1-function-bdfd-list-$authorID]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[31;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[1]]
+$title[BDFD Function List  (Page 1)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 1/16]
+$addButton[no;more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[61;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[2]]
+$title[BDFD Function List (Page 2)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 2/16]  
+$addButton[no;1-function-bdfd-list-$authorID;Back ◀︎;secondary;no;]
+$addButton[no;1more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==1more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[91;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[3]]
+$title[BDFD Function List (Page 3)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 3/16]  
+$addButton[no;more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;2more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==2more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[121;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[4]]
+$title[BDFD Function List (Page 4)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 4/16]  
+$addButton[no;1more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;3more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==3more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[151;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[5]]
+$title[BDFD Function List (Page 5)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 5/16] 
+$addButton[no;2more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;4more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==4more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[181;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[6]]
+$title[BDFD Function List (Page 6)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 6/16] 
+$addButton[no;3more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;5more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==5more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[211;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[7]]
+$title[BDFD Function List (Page 7)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 7/16] 
+$addButton[no;4more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;6more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==6more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[241;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[8]]
+$title[BDFD Function List (Page 8)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 8/16] 
+$addButton[no;5more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;7more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==7more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[271;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[9]]
+$title[BDFD Function List (Page 9)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 9/16] 
+$addButton[no;6more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;8more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==8more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[301;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[10]]
+$title[BDFD Function List (Page 10)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 10/16] 
+$addButton[no;7more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;9more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==9more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[331;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[11]]
+$title[BDFD Function List (Page 11)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 11/16] 
+$addButton[no;8more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;10more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==10more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[330;.] $editSplitText[361;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[12]]
+$title[BDFD Function List (Page 12)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 12/16] 
+$addButton[no;9more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;11more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==11more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[330;.] $editSplitText[360;.] $editSplitText[391;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[13]]
+$title[BDFD Function List (Page 13)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 13/16] 
+$addButton[no;10more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;12more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==12more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[330;.] $editSplitText[360;.] $editSplitText[390;.] $editSplitText[421;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[14]]
+$title[BDFD Function List (Page 14)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 14/16] 
+$addButton[no;11more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;13more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==13more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[330;.] $editSplitText[360;.] $editSplitText[390;.] $editSplitText[420;.] $editSplitText[451;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[15]]
+$title[BDFD Function List (Page 15)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 15/16] 
+$addButton[no;12more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;14more-function-list-bdfd;Next ▶︎;secondary;no;]
+$endif
+
+$if[$customID==14more-function-list-bdfd]
+$removeButtons
+$httpGet[https://botdesignerdiscord.com/public/api/function_tag_list]
+
+$textSplit[$replaceText[$replaceText[$replaceText[$httpResult;";;-1];[;;1];\];;0];,]
+$editSplitText[30;.] $editSplitText[60;.] $editSplitText[90;.] $editSplitText[120;.] $editSplitText[150;.] $editSplitText[180;.] $editSplitText[210;.] $editSplitText[240;.] $editSplitText[270;.] $editSplitText[300;.] $editSplitText[330;.] $editSplitText[360;.] $editSplitText[390;.] $editSplitText[420;.] $editSplitText[450;.] $editSplitText[464;.]
+$textSplit[$joinSplitText[
+];.]
+$var[1;$splitText[16]%{DOL}%year]
+$title[BDFD Function List (Page 16)]
+$description[$var[1]]
+$color[$var[color]]
+$footer[Page 16/16] 
+$addButton[no;13more-function-list-bdfd;Back ◀︎;secondary;no;]
+$addButton[no;more-function-list-bdfd;All the Way Back ◀︎;secondary;no;]
+$endif
