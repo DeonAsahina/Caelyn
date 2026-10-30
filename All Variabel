@@ -100,3 +100,84 @@ nilai: kosong
 
 giveawayPrize
 nilai: kosong
+
+VARIABEL LOG MODERATOR
+eMbed
+nilai: kosong
+
+channelidVar
+nilai: kosong
+
+pesan
+nilai: kosong
+
+VARIABEL LINE/BATAS
+saluranid
+nilai: kosong
+
+link
+nilai: kosong
+
+VARIABEL STICKY MESSAGE
+messageID
+nilai: kosong
+
+VARIABEL VERIFY
+ch
+nilai: kosong
+
+rl
+nilai: kosong
+
+url
+nilai: kosong
+
+VARIABEL GAME SPLIT
+p1SOS
+nilai: kosong
+
+p2SOS
+nilai: kosong
+
+p1ChoiceSOS
+nilai: kosong
+
+p2ChoiceSOS
+nilai: kosong
+
+VARIABEL MARRIAGE
+isPeoposed
+nilai: kosong
+
+VARIABEL MENIKAH
+pasangan
+nilai: kosong
+
+status
+nilai: Single
+
+tgl_nikah
+nilai: N/A
+
+VARIABEL EKONOMI
+balance
+nilai: 0
+
+bank
+nilai: 0
+
+job
+nilai: kosong
+
+lastDaily
+nilai: 0
+
+lastWork
+nilai: 0
+
+VARIABEL LEVELING 
+xp
+nilai: 0
+
+level
+nilai: 1
