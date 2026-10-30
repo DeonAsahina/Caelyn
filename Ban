@@ -79,3 +79,57 @@ $if[$getServerVar[eMbed]==Enabled]
    > **Reason:** $message[reason];6495ED;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
    $endtry
 $endif
+
+slash: /unban
+
+opsi:
+id - text - wajib
+
+code:
+$nomention
+$var[unban;<:emoji_18:1463334224093384896>]
+
+$if[$checkUserPerms[$authorID;ban]==false]
+You need permission `Ban` to use this command.
+$stop
+$endif
+
+$if[$checkContains[$message[id];<@]==true]
+$ephemeral
+Do not mention users. Please provide a numeric User ID.
+$stop
+$endif
+
+$if[$checkContains[$message[id];a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z]==true]
+$ephemeral
+Invalid User ID. Please provide a numeric Discord ID only.
+$stop
+$endif
+
+$if[$isBanned[$var[user]]==true]
+$ephemeral
+This member is not banned. You cannot unban a member who is not banned.
+$stop
+$endif
+
+$unbanID[$message[>;id]]
+
+$title[$var[unban] Unban]
+$description[
+> **User ID:** $message[id]
+]
+$color[000001]
+$footer[$date]
+$addTimestamp
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[unban] Unban;;> **User:** <@$message[user]>
+> **Reason:** $message[reason];000001;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+$if[$getServerVar[eMbed]==Enabled]
+   $try
+   $sendEmbedMessage[$getServerVar[channelidVar];;$var[unban] Unban;;> **User:** <@$message[user]>
+   > **Reason:** $message[reason];000001;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+$endif
