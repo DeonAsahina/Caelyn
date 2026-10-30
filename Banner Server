@@ -1,0 +1,18 @@
+prefix: c.banner serve
+code:
+$nomention
+$try
+$var[banner;$replaceText[$guildBanner[$guildID];.png;.gif]]
+$httpGet[$var[banner]] $var[s;$httpStatus]
+$if[$var[s]==415]
+$var[banner;$guildBanner[$guildID]]
+$endif
+$thumbnail[$serverIcon]
+$author[$serverName[$guildID]]
+$authorIcon[$serverIcon]
+$description[[Download Link\]($var[banner]?size=512)]
+$image[$var[banner]?size=4096]
+$color[6495ED]
+$catch
+$description[$serverName[$guildID] server tidak memiliki banner]
+$endtry
