@@ -1,0 +1,94 @@
+slash: /add role
+opsi:
+user - user - wajib
+role - role - wajib
+code:
+$nomention
+$var[name;$findUser[$message[user]]]
+
+$if[$checkUserPerms[$authorID;manageroles]==false]
+$ephemeral
+You don't have the `Manage Roles` permission.
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;manageroles]==false]
+$ephemeral
+I don't have the `Manage Roles` permission. Please check my permissions in Server Settings.
+$stop
+$endif
+
+$if[$hasRole[$message[user];$message[role]]==true]
+$ephemeral
+User already has the role <@&$message[role]>!
+$stop
+$endif
+ 
+$if[$rolePosition[$message[role]]<$rolePosition[$highestRole[$botID]]]
+$ephemeral
+My role is still below, please raise my role to the highest
+$stop
+$endif
+
+$if[$rolePosition[$message[role]]<$rolePosition[$highestRole[$authorID]]]
+$ephemeral
+You can’t change that role, it’s equal to or higher than your highest role.
+$stop
+$endif
+ 
+$roleGrant[$message[user];+$message[role]]
+
+$title[<:emoji_35:1474588330476965938> Added Role]
+$description[
+> **User:** <@$var[name]>
+> **Role Added:** <@&$message[role]>
+]
+$color[6495ED]
+$addTimestamp
+
+slash: /remove role
+opsi:
+user - user - wajib
+role - role - wajib
+code:
+$nomention
+$var[name;$findUser[$message[user]]]
+
+$if[$checkUserPerms[$authorID;manageroles]==false]
+$ephemeral
+You don't have the `Manage Roles` permission.
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;manageroles]==false]
+$ephemeral
+I don't have the `Manage Roles` permission. Please check my permissions in Server Settings.
+$stop
+$endif
+
+$if[$hasRole[$message[user];$message[role]]==true]
+$ephemeral
+User already has the role <@&$message[role]>!
+$stop
+$endif
+ 
+$if[$rolePosition[$message[role]]<$rolePosition[$highestRole[$botID]]]
+$ephemeral
+My role is still below, please raise my role to the highest
+$stop
+$endif
+
+$if[$rolePosition[$message[role]]<$rolePosition[$highestRole[$authorID]]]
+$ephemeral
+You can’t change that role, it’s equal to or higher than your highest role.
+$stop
+$endif
+ 
+$roleGrant[$message[user];-$message[role]]
+$title[<:emoji_40:1476151785059258399> Role Remove]
+$description[
+> **User:** <@$var[name]>
+> **Role Remove:** <@&$message[role]>
+]
+$addTimestamp
+$color[6495ED]
