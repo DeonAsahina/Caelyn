@@ -1,0 +1,17 @@
+slash: /hug
+
+opsi:
+user - user - wajib
+
+code:
+$nomention
+$var[user;$findUser[$message[user]]]
+
+$onlyIf[$guildID!=;]
+$suppressErrors[Error]
+
+$httpGet[https://api.waifu.pics/sfw/hug]
+hug <@$findUser[$var[user]]>
+$image[$httpResult[url]]
+$color[6495ED]
+$addTimestamp
