@@ -1,0 +1,76 @@
+slash: /kick
+
+opsi:
+user - user - wajib
+reason - text
+
+code:
+$nomention
+$var[e.kick;<:emoji_33:1474596293056659466>]
+$var[color;6495ED]
+
+$if[$isBot[$message[user]]==true]
+$ephemeral
+Imagine me kicking myself… chaos unlocked.
+I don’t kick fellow bots.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;kick]==false]
+$ephemeral
+You need permission `Kick` to use this command.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+Imagine me kicking myself… chaos unlocked.
+$stop
+$endif
+
+$if[$message[user]==$authorID]
+$ephemeral
+You cannot kick yourself.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+You cannot kick the server owner.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+You need a higher role and the required permission.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The bot's role is lower than the user's role.
+$stop
+$endif
+
+
+$kick[$message[user];$message[reason]]
+
+$title[$var[e.kick] Kick]
+$description[
+> **User:** <@$message[user]>
+> **Reason:** $message[reason]
+]
+$color[$var[color]]
+$addTimestamp
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[e.kick] Kick;;> **User:** <@$message[user]>
+> **Reason:** $message[reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+$if[$getServerVar[eMbed]==Enabled]
+   $try
+   $sendEmbedMessage[$getServerVar[channelidVar];;$var[e.kick] Kick;;> **User:** <@$message[user]>
+   > **Reason:** $message[reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+$endif
