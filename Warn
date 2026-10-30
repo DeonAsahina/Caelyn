@@ -1,0 +1,258 @@
+slash: /warn
+
+opsi:
+user - user - wajib
+reason - text - wajib
+
+code:
+$nomention
+$var[color;6495ED]
+$var[emoji;<:emoji_39:1475799540048330794>]
+
+$if[$isBot[$message[user]]==true]
+$ephemeral
+You cannot warn the bot.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;moderatemembers]==false]
+$ephemeral
+You need permission `Timeout Members` to use this command.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+You cannot warn the bot.
+$stop
+$endif
+
+$if[$message[user]==$authorID]
+$ephemeral
+You cannot warn yourself.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+The server owner cannot be warn.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user role is higher than your.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The user role is higher than bot.
+$stop
+$endif
+
+$if[$isSlash]
+$var[user;$message[user]]
+$var[reason;$message[reason]]
+$endif
+ 
+$var[ID;$randomString[8]]
+$color[$getRoleColor[$highestRole[$botID]]]
+$title[$var[emoji] Warning]
+$color[$getRoleColor[$highestRole[$botID]]]
+$description[
+> **User:** <@$findUser[$var[user]]>
+> **Reason:** $var[reason]
+> **Case ID: $var[ID]**
+]
+$color[$var[color]]
+$if[$getUserVar[json_data;$var[user]]==]
+$setUserVar[json_data;{};$var[user]]
+$endif
+
+$jsonParse[$getUserVar[json_data;$var[user]]]
+
+$jsonSet[warns;$sum[$json[warns];1]]
+$jsonSet[warn-$json[warns];$var[reason]]
+$jsonSet[warn-$json[warns]-date;<t:$getTimestamp:D>]
+$jsonSet[warn-$json[warns]-code;$var[ID]]
+$var[format_json;$jsonPretty[2]]
+$setUserVar[json_data;$var[format_json];$var[user]]
+
+$author[Warning/s #$json[warns]]
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[emoji] Warning;;> **User:** <@$findUser[$message[user]]>
+> **Reason:** $message[reason]
+> **Case ID: $var[ID]**;$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+   $if[$getServerVar[embeD]==Enabled]
+   $try$sendEmbedMessage[$getServerVar[channelidVar];;$var[emoji] Warning;;> **User:** <@$findUser[$message[user]]>
+> **Reason:** $message[reason]
+> **Case ID: $var[ID]**;$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+   $endif
+
+slash: /check warn
+
+opsi:
+user - user - wajib
+
+code:
+$nomention
+$if[$isBot[$message[user]]==true]
+$ephemeral
+You can't use this command on a bot.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;moderatemembers]==false]
+$ephemeral
+You need permission `Timeout Members` to use this command.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+You can't use this command on a bot.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+Cannot check the server owner warnings.
+$stop
+$endif
+
+$if[$isSlash]
+$var[user;$message[user]]
+$endif
+ 
+$jsonParse[$getUserVar[json_data;$var[user]]]
+$title[<:emoji_39:1475799540048330794> <@$findUser[$var[user]]> Warnings]
+$description[
+$if[$json[warn-1-code]!=null]$addField[
+Case ID: $json[warn-1-code];
+Reason: $json[warn-1] 
+Time: $json[warn-1-date]] 
+$endif
+ 
+$if[$json[warn-2-code]!=null]$addField[
+Case ID: $json[warn-2-code];
+Reason: $json[warn-2] 
+Time: $json[warn-2-date]] 
+$endif
+ 
+$if[$json[warn-3-code]!=null]$addField[
+Case ID: $json[warn-3-code];
+Reason: $json[warn-3] 
+Time: $json[warn-3-date]] 
+$endif
+ 
+$if[$json[warn-4-code]!=null]$addField[
+Case ID: $json[warn-4-code];
+Reason: $json[warn-4] 
+Time: $json[warn-4-date]] 
+$endif
+ 
+$if[$json[warn-5-code]!=null]$addField[
+Case ID: $json[warn-5-code];
+Reason: $json[warn-5] 
+Time: $json[warn-5-date]] 
+$endif]
+$color[6495ED]
+$if[$json[warns]==0]
+$description[No warnings found for this user.]
+$endif
+
+slash: /remove warn
+
+opsi:
+user - user - wajib
+case-id - text
+
+code:
+$nomention
+$onlyIf[$checkUserPerms[$authorID;moderatemembers]==true;You are missing the following permissions `moderatemembers`]
+$onlyIf[$checkUserPerms[$botID;moderatemembers]==true;I am missing the following permissions `moderatemembers`]
+ 
+$if[$isSlash]
+    $var[user;$message[user]]
+    $var[ID;$message[case-id]]
+$else 
+    $onlyIf[$mentioned[1]!=;Use `prefix`removewarn {user} {case-id}]
+    $onlyIf[$message[2]!=;Please enter the case ID]
+    $var[user;$mentioned[1]]
+    $var[ID;$noMentionMessage]
+$endif
+ 
+$jsonParse[$getUserVar[json_data;$var[user]]]
+ 
+$if[$var[ID]==$json[warn-1-code]]
+    $jsonSet[warn-1;$json[warn-2]]
+    $jsonSet[warn-1-date;$json[warn-2-date]]
+    $jsonSet[warn-1-code;$json[warn-2-code]]
+    $jsonSet[warn-2;$json[warn-3]]
+    $jsonSet[warn-2-date;$json[warn-3-date]]
+    $jsonSet[warn-2-code;$json[warn-3-code]]
+    $jsonSet[warn-3;$json[warn-4]]
+    $jsonSet[warn-3-date;$json[warn-4-date]]
+    $jsonSet[warn-3-code;$json[warn-4-code]]
+    $jsonSet[warn-4;$json[warn-5]]
+    $jsonSet[warn-4-date;$json[warn-5-date]]
+    $jsonSet[warn-4-code;$json[warn-5-code]]
+    $jsonSet[warn-5;null]
+    $jsonSet[warn-5-date;null]
+    $jsonSet[warn-5-code;null]
+    $jsonSet[warns;$sub[$json[warns];1]]
+$description[Remove warning! `Case ID: $var[ID]`]
+$elseif[$var[ID]==$json[warn-2-code]]
+    $jsonSet[warn-2;$json[warn-3]]
+    $jsonSet[warn-2-date;$json[warn-3-date]]
+    $jsonSet[warn-2-code;$json[warn-3-code]]
+    $jsonSet[warn-3;$json[warn-4]]
+    $jsonSet[warn-3-date;$json[warn-4-date]]
+    $jsonSet[warn-3-code;$json[warn-4-code]]
+    $jsonSet[warn-4;$json[warn-5]]
+    $jsonSet[warn-4-date;$json[warn-5-date]]
+    $jsonSet[warn-4-code;$json[warn-5-code]]
+    $jsonSet[warn-5;null]
+    $jsonSet[warn-5-date;null]
+    $jsonSet[warn-5-code;null]
+    $jsonSet[warns;$sub[$json[warns];1]]
+$description[Remove warning! `Case ID: $var[ID]`]
+$elseif[$var[ID]==$json[warn-3-code]]
+    $jsonSet[warn-3;$json[warn-4]]
+    $jsonSet[warn-3-date;$json[warn-4-date]]
+    $jsonSet[warn-3-code;$json[warn-4-code]]
+    $jsonSet[warn-4;$json[warn-5]]
+    $jsonSet[warn-4-date;$json[warn-5-date]]
+    $jsonSet[warn-4-code;$json[warn-5-code]]
+    $jsonSet[warn-5;null]
+    $jsonSet[warn-5-date;null]
+    $jsonSet[warn-5-code;null]
+    $jsonSet[warns;$sub[$json[warns];1]]
+$description[Remove warning! `Case ID: $var[ID]`]
+$elseif[$var[ID]==$json[warn-4-code]]
+    $jsonSet[warn-4;$json[warn-5]]
+    $jsonSet[warn-4-date;$json[warn-5-date]]
+    $jsonSet[warn-4-code;$json[warn-5-code]]
+    $jsonSet[warn-5;null]
+    $jsonSet[warn-5-date;null]
+    $jsonSet[warn-5-code;null]
+    $jsonSet[warns;$sub[$json[warns];1]]
+$description[Remove warning! `Case ID: $var[ID]`]
+$elseif[$var[ID]==$json[warn-5-code]]
+    $jsonSet[warn-5;null]
+    $jsonSet[warn-5-date;null]
+    $jsonSet[warn-5-code;null]
+    $jsonSet[warns;$sub[$json[warns];1]]
+$description[Remove warning! `Case ID: $var[ID]`]
+$endif
+ 
+$var[format_json;$jsonPretty[2]]
+$setUserVar[json_data;$var[format_json];$var[user]]
+$author[$json[warns] Warnings]
+$footer[$addTimestamp]
+$color[6495ED]
