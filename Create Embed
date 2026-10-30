@@ -1,0 +1,36 @@
+slash: /create embed 
+opsi:
+channel - channel - wajib
+description - text - wajib
+message - text
+title - text
+url_title - text
+color - text
+author - text
+author_icon - text
+footer - text
+footer_icon - text
+thumbnail - text
+image - text
+timestamp - text
+code:
+$nomention
+
+$suppressErrors[Error]
+
+$if[$checkUserPerms[$authorID;managemessages]==false]
+$ephemeral
+You don't have the `Manage Messages` permission.
+$else
+
+
+$if[$checkUserPerms[$botID;managemessages]==false]
+$ephemeral
+$username[$botID] is missing the `Manage Messages` permission.
+$else
+
+$sendEmbedMessage[$message[channel];$message[message];$message[title];$message[title_url];$message[description];$message[color];$message[author];$message[author_icon];$message[footer];$message[footer_icon];$message[thumbnail];$message[image];$message[timestamp];no]
+$ephemeral
+Berhasil
+Periksa https://discord.com/channels/$guildID/$message[channel]/$message[channel]
+$endif
