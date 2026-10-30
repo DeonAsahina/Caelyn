@@ -1,0 +1,24 @@
+prefix: !example
+code:
+$nomention
+$httpGet[https://helloacm.com/api/unix-timestamp-converter/?cached&s=$creationDate[$authorID;02-01-2006-15:04]]
+$authorIcon[$userAvatar[$botID]]
+$author[$username[$botID]#$discriminator[$botID]]
+$thumbnail[$userAvatar[737946187830919218]]
+$description[
+<:emoji_39:1476562992412754000> **__Bot__**
+> Name → $username[$botID]
+> Tag → #$discriminator[$botID]
+> ID → $botID
+> Language → $scriptLanguage `(BDFD)`
+> Slash → $slashCommandsCount
+> Server → $serverCount
+> Uptime → $uptime
+> Host end in → <t:$hostingExpireTime[yes]:D> (<t:$hostingExpireTime[yes]:T>)
+> Create → <t:$httpResult:f>
+<:emoji_40:1476563333514526881> **__Developer__**
+> Name → [Deon\](https://discord.com/users/737946187830919218)
+> Tag →  #$discriminator[$botOwnerID]
+> Status → $getUserStatus[$botOwnerID] `(Single)`]
+$color[6495ED]
+$addTimestamp
