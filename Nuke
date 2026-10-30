@@ -1,0 +1,60 @@
+slash: /nuke
+
+code:
+$nomention
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need the `Manage Messages` permission.
+$stop
+$endif
+
+$description[
+**Warning!**
+
+Clicking the `Nuke` button will delete this channel and recreate it with its original settings. This action cannot be undone.
+]
+$footer[Nuked]
+$footerIcon[https://cdn.discordapp.com/attachments/1195571870712463521/1376103446796570764/TACTICAL_NUKE_IS_COMING.gif?ex=68341bb4&is=6832ca34&hm=811d736956d038fc38c668d5f87f4f28100fe387cf14fd8e0114c27f56e78d11&]
+$color[87CEFA]
+$addTimestamp
+$addButton[no;nuked;Nuke;danger;no;;]
+
+prefix: $onInteraction[nuked]
+
+$c[LANJUTAN DARI COMMAND NUKED]
+
+$nomention
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need the `Manage Channels` permission 
+$stop
+$endif
+
+$var[channel;$findChannel[$message[1]]]
+
+$if[$var[channel]==]
+
+$var[name;$channelName[$channelID]]
+$var[position;$channelPosition]
+$var[category;$parentID]
+
+$deleteChannels[$channelID]
+$createChannel[$var[name];text;$var[category]]
+$modifyChannel[$findChannel[$var[name]];;;;$var[position];$var[category]]
+$replyIn[2s]
+$channelSendMessage[$findChannel[$var[name]];https://tenor.com/view/boom-gif-20562682]
+
+$endif
+
+$if[$var[channel]!=]
+
+$var[name;$channelName[$var[channel]]]
+$var[position;$channelPosition[$var[channel]]]
+$var[category;$parentID[$var[channel]]]
+
+$deleteChannels[$var[channel]]
+$createChannel[$var[name];text;$var[category]]
+$modifyChannel[$findChannel[$var[name]];;;;$var[position];$var[category]]
+$replyIn[2s]
+$channelSendMessage[$findChannel[$var[name]];https://tenor.com/view/boom-gif-20562682]
+$endif
