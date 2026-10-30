@@ -1,0 +1,35 @@
+slash: /say
+
+opsi:
+message - text - wajib
+channel - channel - wajib
+
+code:
+$nomention
+$if[$checkUserPerms[$authorID;managemessages]==false]
+$ephemeral
+You need the `Manage Messages` permission.
+$stop
+$endif
+
+$if[$isSlash==true]
+$ephemeral
+Message sent successfully to <#$message[channel]>
+$channelSendMessage[$message[channel];$message[message]]
+$endif
+
+prefix: c.say
+
+code:
+$nomention
+$allowMention
+$if[$or[$checkUserPerms[$authorID;managemessages]==true;$isAdmin[$authorID]==true;<@$authorID>==<@$serverOwner>]==true]
+$try
+$reply[$channelID;$repliedMessageID]
+$endtry
+$message
+$deletecommand
+$else
+$reply
+You don't have the required permissions to use this command.
+$endif
