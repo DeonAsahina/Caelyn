@@ -1,0 +1,81 @@
+slash: /ban
+
+opsi:
+user - user - wajib
+reason - text
+
+code:
+$nomention
+$var[e.ban;<:emoji_34:1474258598124322888>]
+$var[c.ban;6495ED]
+
+$if[$isBot[$message[user]]==true]
+$ephemeral
+I cannot ban myself and
+I cannot ban other bots.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;ban]==false]
+$ephemeral
+You need permission `Ban Members` to use this command.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+I cannot ban myself.
+$stop
+$endif
+
+$if[$message[user]==$authorID]
+$ephemeral
+You cannot ban yourself.
+$stop
+$endif
+ 
+$if[$message[user]==$serverOwner]
+$ephemeral
+You cannot ban the server owner.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+You need a higher role and the required permission.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$highestRole[$message[user]]]]
+$ephemeral
+The bot's role is lower than the user's role.
+$stop
+$endif
+
+$if[$isBanned[$message[user]]==true]
+$ephemeral
+The user has been banned.
+$stop
+$endif
+
+$banID[$replaceText[$replaceText[$checkCondition[$message[2;reason]==];true;No reason;-1];false;$replaceText[$message;$message[1;user]; ;1]];$message[1;user]]
+
+$title[$var[e.ban] Ban]
+$description[
+> **User:** <@$message[user]>
+> **Reason:** $replaceText[$replaceText[$checkCondition[$message[2;reason]==];true;No reason;1];false;$message[2;reason];1]
+]
+$color[$var[c.ban]]
+$addTimestamp
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[e.ban] Ban;;> **User:** <@$message[user]>
+> **Reason:** $message[reason];6495ED;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+$if[$getServerVar[eMbed]==Enabled]
+   $try
+   $sendEmbedMessage[$getServerVar[channelidVar];;$var[e.ban] Ban;;> **User:** <@$message[user]>
+   > **Reason:** $message[reason];6495ED;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+$endif
