@@ -1,0 +1,102 @@
+murder
+nilai: 0
+
+points
+nilai: 0
+
+onGoing
+nilai: no
+
+move
+nilai: kosong
+
+Money
+nilai: 0
+
+VARIABEL WARN
+json_data
+nilai: {
+    "warns": 0,
+    "warn-1": "null",
+    "warn-1-date": "null",
+    "warn-1-code": "null",
+    "warn-2": "null",
+    "warn-2-date": "null",
+    "warn-2-code": "null",
+    "warn-3": "null",
+    "warn-3-date": "null",
+    "warn-3-code": "null",
+    "warn-4": "null",
+    "warn-4-date": "null",
+    "warn-4-code": "null",
+    "warn-5": "null",
+    "warn-5-date": "null",
+    "warn-5-code": "null"}
+
+VARIABEL AFK
+afk
+nilai: kosong
+
+afkmsg
+nilai: kosong
+
+afktime
+nilai: <t:$getTimestamp:R>
+
+VARIABEL CONFES
+confessChannel
+nilai: kosong
+
+VARIABEL WELCOME
+embeD
+nilai: Disabled
+
+roleID_Var
+nilai: 0
+
+channelIDVar
+nilai: 0
+
+autoRole
+nilai: Disabled
+
+page
+nilai: 0
+
+wlchannel
+nilai: kosong
+
+VARIABEL MEMORY
+memorymatchdata
+nilai: kosong
+
+VARIABEL LIST BANNED
+ApiKey
+nilai: 01THor7XsvLQUzVlvLzF2QKkB156f9ArgJWOqCGMC9ZJTHrSui
+
+BotToken
+nilai: TOKEN BOT KAMU
+
+VARIABEL FRUIT GUESS
+fruits
+nilai: {
+  "0": "Apple",
+  "1": "Banana",
+  "2": "Cherry",
+  "3": "Lemon",
+  "4": "Mango"
+}
+
+VARIABEL ROLE MEMBER LIST
+ApiKey
+nilai: 01THor7XsvLQUzVlvLzF2QKkB156f9ArgJWOqCGMC9ZJTHrSui
+
+BotToken
+nilai: BOT TOKEN KAMU
+
+VARIABEL GIVEAWAY
+giveawayParticipants
+nilai: kosong
+
+giveawayPrize
+nilai: kosong
