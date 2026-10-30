@@ -1,0 +1,23 @@
+slash: /server info
+code:
+$nomention
+$thumbnail[$serverIcon]
+$author[$serverName[$guildID]]
+$description[
+> [$serverName[$guildID]\](https://discord.gg/$getServerInvite)
+> <:emoji_38:1476173490670407762> **Founder:** <@$serverOwner>
+> <:emoji_38:1476172612475555913> **Server Created:** <t:$calculate[($guildID / 4194304 + 1420070400000) / 1000]:F>
+
+> **Verification:** $serverVerificationLvl
+
+> **Members:** $membersCount
+> **Booster:** $boostCount
+
+> **Category:** $categoryCount
+> **Channel:** $channelCount
+> **Emoji:** $emoteCount
+> **Roles:** $roleCount
+]
+$color[6495ED]
+$addTimestamp
+$footer[ID: $guildID]
