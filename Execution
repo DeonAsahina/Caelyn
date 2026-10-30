@@ -1,0 +1,47 @@
+prefix: c.execution
+
+code:
+$nomention
+$jsonArray[user]
+
+$var[r;$findUser[$randomUser]]
+
+$if[$and[$isBot[$var[r]]==false;$jsonArrayIndex[user;$var[r]]==-1]==true]
+$jsonArrayAppend[user;$username[$var[r]]]
+$else
+$jsonArrayAppend[user;$username]
+$endif
+$var[Random;$random[190;2842]]
+$var[Murder;1]
+$color[6495ED]
+$authorIcon[$authorAvatar]
+$author[$username]
+$thumbnail[https://media.discordapp.net/attachments/1040985199086936146/1068241190866133012/48ef98203ad8769cb620d908de61cde9.gif]
+$description[You have $randomText[Murdered;Stabbed;Ended the life of;Assasinated;destroyed;Extinguished;finished] $json[user;0] $randomText[With cold blood!;With no sign Of regret!;With a Smile on Your face!;Without hesitating!]
+You got **__$var[Random]Points!__** by Eliminating your target!
+
+**$randomText[You don’t have much time for the others..;There's dust on your already Dusty hands;you went to the sink and washed your hands off;cought due to The dust...;The cycle Continues...;Your hands goes Numb...;Look at yourself =)...;That’s the expression of someone who’s died twice in a row...]**]
+$setUserVar[points;$sum[$var[Random];$getUserVar[points]]]
+$setUserVar[murder;$sum[$var[Murder];$getUserVar[murder]]]
+$footer[Murdered $addTimestamp]
+$cooldown[3s;You need to wait <t:$sum[$getTimestamp;$getCooldown[normal]]:R> before you can Murder again! ||=D||]
+
+prefix: c.points
+
+code:
+$nomention
+$description[
+
+You've murdered :
+
+***$getUserVar[murder;$mentioned[1;yes]] Members.***
+
+You have :
+ 
+***$getUserVar[points;$mentioned[1;yes]] Points***
+
+]
+$color[D70067]
+$thumbnail[$serverIcon]
+$author[$username[$mentioned[1;yes]]]
+$authorIcon[$userAvatar[$mentioned[1;yes]]]
