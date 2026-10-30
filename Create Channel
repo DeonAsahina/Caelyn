@@ -1,0 +1,62 @@
+slash: /creat channel
+opsi:
+nama - text - wajib
+type - text - wajib
+category - channel - wajib
+code:
+$nomention
+$embedSuppressErrors[;Something is wrong;00eeff;]
+
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;managechannels]==false]
+$ephemeral
+Bot need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$message[type]==Text]
+$createChannel[$message[name];Text]
+$endif
+$if[$message[type]==Voice]
+$createChannel[$message[name];Voice]
+$endif
+$if[$message[category]==]
+$createChannel[$message[name];$message[type]]
+$else
+$createChannel[$message[name];$message[type];$message[category]]
+$endif
+
+$title[<:emoji_35:1474588330476965938> Create Channel]
+$description[
+> **Channel:** [$message[name]\](https://discord.com/channels/$guildID/$findChannel[$message[name]])
+> **Type:** $message[type]
+> **Category:** $if[$message[category]==] No category provided $else $channelName[$findChannel[$message[category]]] $endif
+]
+$color[6495ED]
+$addTimestamp
+
+slash: /delete channel
+opsi:
+channel - channel - wajib
+code:
+$nomention
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need permission `Manage Channel`.
+$else
+
+$if[$checkUserPerms[$botID;managechannels]==false]
+$ephemeral
+Bot need permission `Manage Channel`.
+$else
+
+$deleteChannels[$message[channel]]
+$ephemeral
+Channel deleted successfully.
+$endif
+$endif
