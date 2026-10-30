@@ -1,0 +1,252 @@
+slash: /marry
+prefix: c.marry
+
+opsi:
+user - user - wajib
+
+code:
+$nomention
+$var[target;$message[user]]
+
+$if[$message[user]==$authorID]
+$ephemeral
+You can’t marry yourself.
+$stop
+$endif
+
+$if[$message[user]==$botID]
+$ephemeral
+You can’t marry a bot.
+$stop
+$endif
+
+$if[$getUserVar[status;$authorID]==Married]
+$ephemeral
+You’re already married.
+$stop
+$endif
+
+$if[$getUserVar[status;$var[target]]==Married]
+$ephemeral
+This user is already married.
+$stop
+$endif
+
+$title[💍 Marriage Proposal]
+$description[<@$var[target]>, <@$authorID> would like to marry you. Do you accept the proposal?]
+$color[87CEFA]
+
+$addButton[no;marry_accept.$var[target].$authorID;Accept;primary;no;💍]
+$addButton[no;marry_reject.$var[target].$authorID;Reject;secondary;no;💔]
+
+$onInteraction
+code:
+$c[INTERACTION MARRY]
+$nomention
+$if[$checkContains[$customID;marry_]==false]
+$stop
+$endif
+
+$textSplit[$customID;.]
+
+$var[action;$splitText[1]]
+$var[targetID;$splitText[2]]
+$var[pelamarID;$splitText[3]]
+
+$if[$authorID!=$var[targetID]]
+$ephemeral
+Only <@$var[targetID]> can use this button
+$removeButtons
+$stop
+$endif
+
+$if[$var[action]==marry_accept]
+
+$setUserVar[status;Married;$authorID]
+$setUserVar[pasangan;$var[pelamarID];$authorID]
+$setUserVar[tgl_nikah;$day $month $year;$authorID]
+
+$setUserVar[status;Married;$var[pelamarID]]
+$setUserVar[pasangan;$authorID;$var[pelamarID]]
+$setUserVar[tgl_nikah;$day $month $year;$var[pelamarID]]
+
+$removeButtons
+$title[💍Congratulations on Your Marriage]
+$description[❤️<@$authorID> and <@$var[pelamarID]> are officially married
+📅$day $month $year]
+$color[87CEFA]
+
+$stop
+$endif
+
+$if[$var[action]==marry_reject]
+
+$removeButtons
+$title[💔Proposal Declined]
+$description[Sorry <@$var[pelamarID]>, your proposal has been declined by <@$authorID>]
+$color[87CEFA]
+$footer[🤭]
+
+$stop
+$endif
+
+salsh: /marriage status
+prefix: c.marriage status 
+
+opsi:
+user - user
+
+code:
+$nomention
+
+$if[$isSlash==true]
+$var[target;$message[user]]
+$else
+$var[target;$mentioned[1;yes]]
+$endif
+
+$if[$var[target]==]
+$var[target;$authorID]
+$endif
+
+$if[$isBot[$var[target]]==true]
+$ephemeral
+Bot accounts do not have a marital status.
+$stop
+$endif
+
+$var[stat;$getUserVar[status;$var[target]]]
+$var[psg;$getUserVar[pasangan;$var[target]]]
+$var[tgl;$getUserVar[tgl_nikah;$var[target]]]
+
+$if[$var[stat]==]
+$var[stat;Single]
+$endif
+
+$if[$var[stat]==proses]
+$var[stat;Single]
+$endif
+
+$if[$isNumber[$var[psg]]==true]
+$var[tampilanPsg;<@$var[psg]>]
+$else
+$var[tampilanPsg;None]
+$endif
+
+$if[$var[tgl]==]
+$var[tgl;N/A]
+$endif
+
+$title[💍 Marital Status: $username[$var[target]]]
+$thumbnail[$userAvatar[$var[target]]]
+$color[87CEFA]
+
+$description[
+💍 **Status:** $var[stat]
+❤️ **Spouse:** $var[tampilanPsg]
+📅 **Wedding Date:** $var[tgl]
+]
+$addTimestamp
+
+slash: /divorce
+predix: c.divorce
+
+code:
+$nomention
+$if[$getUserVar[status;$authorID]!=Married]
+$ephemeral
+You are not currently married
+$stop
+$endif
+
+$var[pasanganID;$getUserVar[pasangan;$authorID]]
+
+$title[⚖️Divorce Request]
+$description[<@$authorID> has filed for divorce from <@$var[pasanganID]>.
+Do you both agree to proceed with the divorce?]
+$color[FFD700]
+$addTimestamp
+
+$addButton[no;cerai.acc.$var[pasanganID].$authorID;Agree to Divorce;danger;no;⚖️]
+
+prefix: $onInteraction
+
+code:
+$nomention
+$if[$checkContains[$customID;cerai.]==false]
+$stop
+$endif
+
+$textSplit[$customID;.]
+
+$var[aksi;$splitText[2]]
+$var[targetID;$splitText[3]]
+$var[pengajuID;$splitText[4]]
+
+$if[$authorID!=$var[targetID]]
+$ephemeral
+Only <@$var[targetID]> can use this.
+$removeButtons
+$stop
+$endif
+
+$if[$var[aksi]==acc]
+
+$setUserVar[status;Single;$var[targetID]]
+$setUserVar[pasangan;;$var[targetID]]
+$setUserVar[tgl_nikah;N/A;$var[targetID]]
+
+$setUserVar[status;Single;$var[pengajuID]]
+$setUserVar[pasangan;;$var[pengajuID]]
+$setUserVar[tgl_nikah;N/A;$var[pengajuID]]
+
+$removeButtons
+$title[💔Divorce Finalized]
+$description[
+The relationship between <@$var[targetID]> and <@$var[pengajuID]>
+has officially ended.]
+$color[DC143C]
+$stop
+$endif
+
+slash: /marriage reset
+prefix: c.marriage reset
+
+opsi:
+user - user
+
+code:
+$nomention
+
+$if[$isSlash==true]
+$var[target;$message[user]]
+$else
+$var[target;$mentioned[1;yes]]
+$endif
+
+$if[$checkUserPerms[$authorID;admin]==false]
+$ephemeral
+You need Administrator permission.
+$stop
+$endif
+
+$if[$var[target]==]
+$ephemeral
+Please specify a user to reset.
+$stop
+$endif
+
+$setUserVar[status;Single;$var[target]]
+$setUserVar[pasangan;;$var[target]]
+$setUserVar[tgl_nikah;N/A;$var[target]]
+
+$title[💍 Marriage Data Reset]
+$description[
+Marriage data for <@$var[target]> has been reset successfully.
+
+💍 **Status:** Single
+❤️ **Spouse:** No spouse
+📅 **Wedding Date:** N/A
+]
+$color[87CEFA]
+$addTimestamp
