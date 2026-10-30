@@ -1,0 +1,25 @@
+slash: /purge
+
+opsi:
+amount - number - wajib
+
+code:
+$nomention
+
+$if[$checkUserPerms[$authorID;managemessages]==false]
+$ephemeral
+You need permission `Manage Messages`
+$stop
+$endif
+
+$suppressErrors[You cannot delete messages older than 14 days.]
+
+$deleteIn[5s]
+$clear[$message[amount]]
+$title[<:emoji_38:1475794001301999636> Purge]
+$description[
+> Deleted `$message[amount]` messages.
+]
+$footer[This message will auto delete]
+$addTimestamp
+$color[6495ED]
