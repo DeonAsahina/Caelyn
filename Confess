@@ -1,0 +1,47 @@
+slash: /set confess
+opsi:
+channel_id - text - wajib
+code:
+$nomention
+
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need permission `Manage Channel`.
+$else
+
+$if[$isNumber[$message[channel_id]]==false]
+$ephemeral
+Channel ID should be numeric only.
+$stop
+$else
+
+$if[$channelExists[$message[channel_id]]==false]
+$ephemeral
+Invalid channel ID, channel could not be found.
+$else
+
+$setServerVar[confessChannel;$message[channel_id]]
+$ephemeral
+Confession channel set to <#$message[channel_id]>
+
+$endif
+$endif
+$endif
+
+slash: /confess 
+opsi:
+message - text - wajib
+code:
+$nomention
+
+$if[$guildID!=]
+$ephemeral
+Run this command in DM with the bot.
+$stop
+$else
+
+$sendEmbedMessage[1462713721439784960;;Confess;;$message[message];6495ED;Unidentified;;;;;;yes;no]
+
+✅ Your confession has been sent
+$endif
+$endif
