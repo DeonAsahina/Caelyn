@@ -1,0 +1,11 @@
+prefix: c.info role
+code:
+$argsCheck[>1;<prefix>role info @role/role name/role id]
+$title[$roleName[$findRole[$message]]]
+$description[<@&$findRole[$message]>
+ID: $findRole[$message]
+Mentionable: $isMentionable[$findRole[$message]]
+Hoisted: $isHoisted[$findRole[$message]]
+Color: #$getRoleColor[$findRole[$message]]
+Position: $rolePosition[$findRole[$message]]]
+$color[$getRoleColor[$findRole[$message]]]
