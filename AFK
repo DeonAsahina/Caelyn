@@ -1,0 +1,90 @@
+slash: /afk
+
+opsi:
+reason - text
+
+code:
+$nomention
+$onlyIf[$guildID!=;]
+$allowUserMentions[]
+$suppressErrors[]
+                
+$c[--------READ ME--------]
+$c[Change The Command CoolDown According To Your Liking (5s is Recommended)]
+$cooldown[5s;Please wait **%time%**.]
+                 
+$if[$and[$rolePosition[$highestRole[$botID]]<$rolePosition[$highestRole[$authorID]];$authorID!=$serverOwner]==true]
+ $changeUsernameWithID[$authorID;{AFK} $displayName[$authorID]]
+                
+$description[ <@$findUser[$message[1;user]]>, You're now AFK: $if[$message==]AFK $else $message $endif
+]
+                
+$setUserVar[afk;yes]
+$setUserVar[afkmsg;$if[$message==]AFK. $else $message $endif]
+$setUserVar[afktime;<t:$getTimestamp:R>]
+$color[6495ED]
+$else
+                
+$description[ <@$findUser[$message[1;user]]>, You're now AFK: $if[$message==]AFK $else $message $endif
+]
+                
+$setUserVar[afk;yes]
+$setUserVar[afkmsg;$if[$message==]AFK. $else $message $endif]
+$setUserVar[afktime;<t:$getTimestamp:R>]
+$color[6495ED]
+$endif
+
+slash: /remove afk
+prefix: $alwaysReply (premium)
+
+code:
+$nomention
+$onlyIf[$guildID!=;]
+$allowUserMentions[]
+$suppressErrors[]
+                
+$c[--------READ ME--------]
+$c[Change The Command CoolDown According To Your Liking (5s is Recommended)]
+$c[gunakan €cooldown{Duration:Error message} dibawah ini jika perlu]
+                 
+                
+$if[$getUserVar[afk]==yes]
+$if[$and[$rolePosition[$highestRole[$botID]]<$rolePosition[$highestRole[$authorID]];$authorID!=$serverOwner]==true]
+$changeUsernameWithID[$authorID;$displayName]
+$color[6495ED]
+$changeUsernameWithID[$authorID;$displayName]
+                
+                
+$description[<@$authorID>, Welcome back! AFK status removed: $getUserVar[afkmsg]
+]
+$color[6495ED]
+$setUserVar[afk;0]
+                
+$else
+                
+$description[<@$authorID>, Welcome back! AFK status removed: $getUserVar[afkmsg]
+]
+$color[6495ED]
+$setUserVar[afk;0]
+                
+$endif
+$endif
+$deleteIn[5s]
+
+prefix: <@
+
+code:
+$nomention
+$reply
+                
+$c[--------READ ME--------]
+$c[Change The Command Delete In According To Your Liking (20s is Recommended)]
+$c[Tambahin kode €deleteIn(Time) jika mau dipakai]
+                
+$if[$getUserVar[afk;$mentioned[<]]==yes]
+$description[<@$mentioned[1;yes]> is currently AFK: $getUserVar[afkmsg;$mentioned[<]] - $getUserVar[afktime;$mentioned[<]]
+]
+$color[6495ED]
+                 
+$endif
+$deleteIn[5s]
