@@ -1,4 +1,4 @@
-command: /avatar
+slash: /avatar
 prefix: c.avatar
 
 $nomention
