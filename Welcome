@@ -1,0 +1,132 @@
+prefix: $onJoined[$getServerVar[channelIDVar]]
+code:
+$ignoreLinks
+$if[$isBot[$authorID]==false]
+
+     $if[$getServerVar[embeD]==Enabled]
+     
+$nomention
+$authorIcon[$serverIcon]
+$author[$serverName[$guildID]]
+$title[Hello <@$authorID>]
+$description[-# Please read and follow the rules. If you need any help, feel free to contact a moderator.
+-# Thank you for joining!]
+$image[https://cdn.discordapp.com/attachments/1462713721439784960/1474239800935448688/20260220_110212.jpg?ex=6999204e&is=6997cece&hm=bef8ca3626e519b15e73b3a29830996a4f42028b0f76784b40b471fd74802a3b&]
+$color[$random[0;9999999]]
+$addTimestamp
+$footer[$date]
+     $endif
+
+     $if[$getServerVar[autoRole]==Enabled]
+$if[$roleExists[$getServerVar[roleID_Var]]==true]
+$roleGrant[$authorID;+$getServerVar[roleID_Var]]
+$endif
+     $endif
+
+$endif
+$removeLinks
+
+slash: /set welcome
+code:
+$nomention
+     $if[$checkUserPerms[$authorID;manageserver]==false]
+$ephemeral
+$description[Kamu butuh izin *manageserver* untuk melakukan perintah ini.]
+     $else
+$title[$toTitleCase[$serverName[$guildID] Panel]]
+$description[Embed ini kamu akan melihat mana yang berfungsi dan tidak berfungsi.]
+$addField[Auto Role: ($if[$roleExists[$getServerVar[roleID_Var]]==true]Configured$elseNot Configured$endif);STATUS: $getServerVar[autoRole];yes]
+$addField[Embed Message:;STATUS: $getServerVar[embeD];yes]
+$newSelectMenu[SETTINGS-$authorID;1;1;SETTINGS]
+$addSelectMenuOption[SETTINGS-$authorID;SET CHANNEL ID;SetChannelID-$authorID;Setup the channel ID;;;]
+$addSelectMenuOption[SETTINGS-$authorID;SET ROLE ID;SetRoleID-$authorID;Setup the role ID;;;]
+$addButton[no;0;Auto Role:;secondary;yes;;]
+$if[$getServerVar[autoRole]==Disabled]
+$addButton[no;ROLEENABLE-$authorID;Enable;success;no;;]
+$addButton[no;ROLEDISABLE-$authorID;Disable;danger;yes;;]
+$else
+$addButton[no;ROLEENABLE-$authorID;Enable;success;yes;;]
+$addButton[no;ROLEDISABLE-$authorID;Disable;danger;no;;]
+$endif
+$addButton[yes;1;‎ ‎ ‎ Embed:‎ ‎  ‎ ;secondary;yes;;]
+$if[$getServerVar[embeD]==Disabled]
+$addButton[no;EMBEDENABLE-$authorID;Enable;success;no;;]
+$addButton[no;EMBEDDISABLE-$authorID;Disable;danger;yes;;]
+$else
+$addButton[no;EMBEDENABLE-$authorID;Enable;success;yes;;]
+$addButton[no;EMBEDDISABLE-$authorID;Disable;danger;no;;]
+$endif
+     $endif
+
+prefix: $onInteraction
+code:
+$nomention
+$if[$and[$checkContains[$customID;ROLEENABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==ROLEENABLE-$authorID]
+$setServerVar[autoRole;Enabled]
+$title[$toTitleCase[$serverName[$guildID] Panel]]
+$description[Embed ini kamu akan melihat mana yang berfungsi dan tidak berfungsi.]
+$addField[Auto Role: ($if[$roleExists[$getServerVar[roleID_Var]]==true]Configured$elseNot Configured$endif);STATUS: $getServerVar[autoRole];yes]
+$addField[Embed Message:;STATUS: $getServerVar[embeD];yes]
+$editButton[ROLEDISABLE-$authorID;Disable;danger;no;;]
+$editButton[ROLEENABLE-$authorID;Enable;success;yes;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;ROLEDISABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==ROLEDISABLE-$authorID]
+$setServerVar[autoRole;Disabled]
+$title[$toTitleCase[$serverName[$guildID] Panel]]
+$description[Embed ini kamu akan melihat mana yang berfungsi dan tidak berfungsi.]
+$addField[Auto Role: ($if[$roleExists[$getServerVar[roleID_Var]]==true]Configured$elseNot Configured$endif);STATUS: $getServerVar[autoRole];yes]
+$addField[Embed Message:;STATUS: $getServerVar[embeD];yes]
+$editButton[ROLEDISABLE-$authorID;Disable;danger;yes;;]
+$editButton[ROLEENABLE-$authorID;Enable;success;no;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;EMBEDENABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==EMBEDENABLE-$authorID]
+$setServerVar[embeD;Enabled]
+$title[$toTitleCase[$serverName[$guildID] Panel]]
+$description[Embed ini kamu akan melihat mana yang berfungsi dan tidak berfungsi.]
+$addField[Auto Role: ($if[$roleExists[$getServerVar[roleID_Var]]==true]Configured$elseNot Configured$endif);STATUS: $getServerVar[autoRole];yes]
+$addField[Embed Message:;STATUS: $getServerVar[embeD];yes]
+$editButton[EMBEDDISABLE-$authorID;Disable;danger;no;;]
+$editButton[EMBEDENABLE-$authorID;Enable;success;yes;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;EMBEDDISABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==EMBEDDISABLE-$authorID]
+$setServerVar[embeD;Disabled]
+$title[$toTitleCase[$serverName[$guildID] Panel]]
+$description[Embed ini kamu akan melihat mana yang berfungsi dan tidak berfungsi.]
+$addField[Auto Role: ($if[$roleExists[$getServerVar[roleID_Var]]==true]Configured$elseNot Configured$endif);STATUS: $getServerVar[autoRole];yes]
+$addField[Embed Message:;STATUS: $getServerVar[embeD];yes]
+$editButton[EMBEDDISABLE-$authorID;Disable;danger;yes;;]
+$editButton[EMBEDENABLE-$authorID;Enable;success;no;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;SETTINGS]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$message==SetChannelID-$authorID]
+     $newModal[channelIDSetUP-$authorID;ChannelID]
+     $addTextInput[SetChan;short;CHANNELID;;;yes;;Channel ID where you want to send the embed.]
+     $elseif[$message==SetRoleID-$authorID]
+     $newModal[roleIDSetUP-$authorID;RoleID]
+     $addTextInput[SetRole;short;ROLEID;;;yes;;The role you want to give to those who joined.]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;channelIDSetUP]==true;$checkContains[$customID;$authorID]==true]]
+$setServerVar[channelIDVar;$input[SetChan]]
+$ephemeral
+$description[Success]
+$endif
+
+$if[$and[$checkContains[$customID;roleIDSetUP]==true;$checkContains[$customID;$authorID]==true]]
+$setServerVar[roleID_Var;$input[SetRole]]
+$ephemeral
+$description[Success]
+$endif
