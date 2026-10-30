@@ -1,0 +1,92 @@
+slash: /truth or dare
+
+code:
+$nomention
+$title[Truth or Dare?]
+$description[**$displayName**, Click the button below to pick truth or dare.]
+$footer[This command is currently under maintenance.]
+$color[6495ED]
+$addButton[no;truth;Truth;success;no;;]
+$addButton[no;dare;Dare;danger;no;;]
+
+prefix: $onInteraction[truthh]
+
+code:
+$nomention
+$cooldown[5s;Please wait a few seconds to press the button]
+
+$removeButtons[$messageID]
+$async[get]
+$var[id;$sendEmbedMessage[$channelID;;Say the Truth!;;$randomText[Kalau jatuh cinta, tipe kamu setia atau posesif?;
+Lebih suka diperjuangkan atau memperjuangkan?;
+Hal kecil apa yang bikin kamu merasa dicintai?;
+Definisi cinta menurut kamu apa?;
+Apa satu kemampuan yang ingin kamu miliki dalam hidup?;
+Apa kata-kata yang selama ini jadi penyemangat buat kamu?;
+Jika kamu bisa bertukar tubuh dengan orang di server ini, kamu ingin bertukar dengan siapa?;
+Apakah kamu pernah mencuri uang orang tua kamu diam-diam?;
+Apa love language/physical touch kamu?;
+Lebih takut kehilangan atau ditinggalkan?;
+Pernah merasa nggak cukup buat orang yang kamu cintai? dan kenapa?;
+Apa alasan putus yang paling nyakitin buat kamu?;
+Pernah selingkuh… atau diselingkuhi?;
+Apa hal paling bodoh yang pernah kamu lakukan demi cinta?;
+Pernah pura-pura move on padahal belum?;
+Lebih percaya cinta atau logika?;
+Lebih sering jatuh cinta duluan atau ditaksir?;
+Jika kamu bisa melakukan perjalanan ke masa lalu dan bertemu dengan satu orang yang kamu pernah berbuat salah, permintaan maaf apa yang ingin kamu sampaikan?;
+Jika kamu punya uang 50 juta sekarang juga, kamu pakai untuk membelanjakan apa? dan kenapa?;
+Apa mimpi teraneh yang pernah kamu alami?;
+Apa pencarian terakhir kamu di google/chrome?;
+Apa hal paling absurd yang pernah kamu beli online?;
+Kalau kamu jadi presiden sehari, kebijakan absurd apa yang kamu buat?;
+Kalau kamu jadi hewan, kamu mau jadi apa dan kenapa?;
+Apa rumor paling aneh yang pernah kamu dengar tentang dirimu?;
+Pernah nggak kamu salah kirim chat buat gebetan tapi malah ke orang lain?;
+Siapa orang terakhir yang kamu stalk media sosialnya?;
+Apa hal paling nggak masuk akal yang pernah kamu percayai pas masih kecil?;
+Berapa hari rekor kamu nggak mandi?;
+Pernah nggak kamu kentut di tempat umum terus pura-pura batuk buat nutupin suaranya?;
+Apa kesan pertama kamu pas pertama kali join ke server ini?;
+Kalau kamu harus kick satu orang dari server ini (cuma buat bercanda), siapa itu?;
+Siapa orang di server ini yang diam-diam kamu kagumi (crush/respect)?;
+Pernah nggak kamu mute seseorang di server ini karena dia berisik atau nyebelin?;
+Siapa member di server ini yang menurut kamu paling asyik diajak ngobrol?;
+Siapa orang yang paling kamu syukuri keberadaannya saat ini?;
+Apa penyesalan terbesar kamu dalam setahun terakhir?;
+Apa satu rahasia yang belum pernah kamu ceritain ke siapa pun di server ini?;
+Apa ketakutan terbesar kamu yang sebenarnya sepele buat orang lain?;
+Kalau kamu bisa ganti nama, kamu mau dinamai siapa?;
+Apa hal paling memalukan yang pernah kamu lakukan di sekolah/kantor?;
+Apa kebiasaan paling aneh yang kamu lakukan pas lagi sendirian?;
+Siapa orang yang terakhir kamu stalk di Instagram?;
+Siapa orang paling ngeselin di server ini?;
+Pernah naksir teman Discord? Kalo pernah siapa?;
+Hal memalukan apa yang terakhir kamu lakukan?;
+Kalau disuruh pilih satu orang di sini jadi pasangan, siapa?;
+Hal yang paling kamu takuti dalam hidup?;
+Kamu lebih pilih pacaran online atau langsung?;Siapa yang paling bikin kamu ketawa di server ini?;
+Kamu suka stalking siapa di server ini?;Siapa orang pertama yang kamu buka DM-nya tiap online?;
+Hal paling aneh yang pernah kamu dengar di voice chat?;
+Siapa mantan yang masih kamu pikirin?;Siapa yang paling kamu kangenin sekarang?;
+Kalau kamu punya satu permintaan aja, apa itu?;Apa isi DM terakhir kamu?;
+Siapa orang yang kamu harap nggak pernah kenal?];6495ED;$username;$authorAvatar;Code by: Jii;;;;yes;yes]]
+
+$addButton[no;truth;Truth;success;no;🤭;$var[id]]
+$addButton[no;dare;Dare;danger;no;😎;$var[id]]
+$endasync
+$await[get]
+
+prefix: $onInteraction[daree]
+
+code:
+$nomention
+$cooldown[5s;Please wait a few seconds to press the button]
+$removeButtons[$messageID]
+$async[get]
+$var[id;$sendEmbedMessage[$channelID;;Do the Dare!;;$randomText[Ubah nickname kamu jadi ‘Si Paling Galau’ selama 1 jam;Nyanyikan lagu di VC selama 30 detik;Kirim emoji random ke 10 orang berbeda;Ganti status Discord kamu jadi ‘Aku jomblo kesepian 😢’;Kirim pick-up line ke orang yang kamu anggap paling lucu di server;Tulis puisi untuk admin dan post di general chat;DM seseorang dan bilang ‘Aku mimpiin kamu semalam 😳’;Spam emoji 🐸 di general 10 kali (tanpa kena timeout 😅);Ganti profile picture kamu jadi foto kucing lucu selama 1 hari;Kirim voice note nyanyi lagu anak-anak;Kirim ulang pesan paling cringe kamu di general chat;Kirim pesan cinta palsu untuk @temanmu;Buat pantun untuk orang yang paling aktif di server ini;Sebutkan 3 fakta random tentang diri kamu;Kirim foto mirror selfie kamu (kalau berani 👀);Akting jadi orang galau saat di voice chat;Tulis pesan panjang seolah kamu mau curhat berat di general;Kirim meme paling absurd yang kamu punya;Ganti bio kamu jadi “Aku penggemar berat kerupuk";Kirim DM ke orang asing dan tanya “Mau jadi sahabat Discord aku?;Post “Aku ganteng/cantik karena default” di #random;Bikin pengakuan palsu di general chat;Ngomong bahasa alien selama 1 menit saat di VC];6495ED;$username;$authorAvatar;Code by Jii;;;;yes;yes]]
+
+$addButton[no;truth;Truth;success;no;;$var[id]]
+$addButton[no;dare;Dare;danger;no;;$var[id]]
+$endasync
+$await[get]
