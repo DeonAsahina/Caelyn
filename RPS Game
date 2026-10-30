@@ -1,0 +1,122 @@
+prefix: c.rps
+code:
+$nomention 
+$c[ # Error: Missing Argument ]
+  $if[$message==]
+Best out of ?
+$stop
+  $endif
+ 
+$c[ # Error: Invalid Num ]
+  $if[$isNumber[$message]==false]
+Give a valid number.
+$stop
+  $endif
+ 
+$c[ # Error: No Decimals Allowed ]
+  $if[$checkContains[$message;.]==true]
+Give a whole number.
+$stop
+  $endif
+ 
+$c[ # Error: Amount = 0 ]
+  $if[$message<1]
+Number must be greater than 0.
+$stop
+  $endif
+ 
+$c[ # Send RPS Game ]
+$var[bestof;$message]
+$title[Rock Paper Scissors | Best Of $var[bestof];1]
+$description[<@$authorID> | 🏆 0;2]
+$thumbnail[$userAvatar[$authorID];2]
+$description[<@$botID> | 🏆 0;3]
+$thumbnail[$userAvatar[$botID];3]
+$color[6495ED]
+$addButton[no;🗿-$authorID;;secondary;no;🗿]
+$addButton[no;🧻-$authorID;;secondary;no;🧻]
+$addButton[no;✂️-$authorID;;secondary;no;✂️]
+
+  prefix: $onInteraction
+  code:
+  $nomention
+ 
+$onlyIf[$checkContains[$customID;🗿;🧻;✂️]==true;]
+$defer
+$textSplit[$customID;-]
+ 
+$c[ # Error: Only For Author ]
+$onlyIf[$authorID==$splitText[2];]
+ 
+$c[ # Store Author Option & Wins ]
+$var[option;$splitText[1]]
+$textSplit[$getEmbedData[$channelID;$messageID;2;description]; | ]
+$var[p1wins;$replaceText[$splitText[2];🏆 ;]]
+ 
+$c[ # Store Bot Option & Wins ]
+$var[botoption;$randomText[🗿;🧻;✂️]]
+$textSplit[$getEmbedData[$channelID;$messageID;3;description]; | ]
+$var[p2wins;$replaceText[$splitText[2];🏆 ;]]
+ 
+$c[ # RPS Result ]
+  $if[$var[option]==$var[botoption]]
+$var[result;$var[option]$var[botoption] | Tie!]
+  $elseif[$var[option]==🗿]
+$if[$var[botoption]==🧻]
+$var[result;🗿<🧻 | P2 Wins!]
+$var[p2wins;$sum[$var[p2wins];1]]
+$else
+$var[result;🗿>✂️ | P1 Wins!]
+$var[p1wins;$sum[$var[p1wins];1]]
+$endif
+  $elseif[$var[option]==🧻]
+$if[$var[botoption]==✂️]
+$var[result;🧻<✂️ | P2 Wins!]
+$var[p2wins;$sum[$var[p2wins];1]]
+$else
+$var[result;🧻>🗿 | P1 Wins!]
+$var[p1wins;$sum[$var[p1wins];1]]
+$endif
+  $elseif[$var[option]==✂️]
+$if[$var[botoption]==🗿]
+$var[result;✂️<🗿 | P2 Wins!]
+$var[p2wins;$sum[$var[p2wins];1]]
+$else
+$var[result;✂️>🧻 | P1 Wins!]
+$var[p1wins;$sum[$var[p1wins];1]]
+$endif
+  $endif
+ 
+$var[bestof;$replaceText[$getEmbedData[$channelID;$messageID;1;title];Rock Paper Scissors | Best Of ;]]
+$var[reqwins;$calculate[($var[bestof]/2)+1]]
+ 
+$c[ # Winner: Author]
+  $if[$var[p1wins]==$var[reqwins]]
+$removeButtons‎
+$title[Rock Paper Scissors | Best Of $var[bestof]]
+$description[<@$authorID> | 🏆 $var[p1wins]
+# 🎉 **Winner**;2]
+$thumbnail[$userAvatar[$authorID];2]
+$description[<@$botID> | 🏆 $var[p2wins];3]
+$thumbnail[$userAvatar[$botID];3]
+ 
+$c[ # Winner: Bot ]
+  $elseif[$var[p2wins]==$var[reqwins]]
+$removeButtons‎
+$title[Rock Paper Scissors | Best Of $var[bestof]]
+$description[<@$authorID> | 🏆 $var[p1wins];2]
+$thumbnail[$userAvatar[$authorID];2]
+$description[<@$botID> | 🏆 $var[p2wins]
+# 🎉 **Winner**;3]
+$thumbnail[$userAvatar[$botID];3]
+ 
+$c[ # Continue Game ]
+  $else
+$title[Rock Paper Scissors | Best Of $var[bestof];1]
+$description[<@$authorID> | 🏆 $var[p1wins];2]
+$thumbnail[$userAvatar[$authorID];2]
+$description[<@$botID> | 🏆 $var[p2wins];3]
+$thumbnail[$userAvatar[$botID];3]
+$removeComponent[result]
+$addButton[yes;result;$var[result];secondary;no;;]
+  $endif
