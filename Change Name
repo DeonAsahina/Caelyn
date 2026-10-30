@@ -1,0 +1,21 @@
+slash: /change name
+
+opsi:
+user - user - wajib
+nick - text - wajib
+
+code:
+$nomention
+$var[name;$findUser[$message[user]]]
+
+$onlyIf[$message[>;user]!=$authorID;You can't change your own name]
+$onlyIf[$message[>;user]!=$serverOwner;Seriously change server owner name? are you kidding me]
+
+$changeUsernameWithID[$var[name];$message[2;nick]]
+$title[Change Name]
+$description[
+> **User:** <@$var[name]>
+> **Replaced with name:** $message[2;nick]
+]
+$addTimestamp
+$color[6495ED]
