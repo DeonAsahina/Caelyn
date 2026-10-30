@@ -256,3 +256,27 @@ $setUserVar[json_data;$var[format_json];$var[user]]
 $author[$json[warns] Warnings]
 $footer[$addTimestamp]
 $color[6495ED]
+
+slash: /clear warn
+opsi:
+user - user - wajib
+code:
+$nomention
+$onlyIf[$checkUserPerms[$authorID;moderatemembers]==true;You are missing the following permissions `moderatemembers`]
+$onlyIf[$checkUserPerms[$botID;moderatemembers]==true;I am missing the following permissions `moderatemembers`]
+ 
+$if[$isSlash]
+    $var[user;$message[user]]
+$else 
+    $onlyIf[$mentioned[1]!=;Use `prefix`clearwarn {user}]
+    $var[user;$mentioned[1]]
+$endif
+ 
+ $resetUserVar[json_data;$var[user]]
+
+$var[format_json;$jsonPretty[2]]
+$setUserVar[json_data;$var[format_json];$var[user]]
+$author[Warning]
+$description[> <:emoji_38:1373084081734029426> Successfully cleaned]
+$footer[$addTimestamp]
+$color[d2042d]
