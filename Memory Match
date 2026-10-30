@@ -1,0 +1,187 @@
+slash: /memory match
+code:
+$nomention
+
+$title[🧠 Memory Match]
+$description[❓ ❓]
+$color[6495ED]
+$addField[❕ What is this? And how do you play it?;This is a memory matching game where you flip each button to reveal the secret emoji behind it. There are two of each emoji. Your task is to flip matching emoji pairs consecutively. If you fail to match them, the emojis will flip back, but their positions will not change. You are racing against time to flip all the emojis as quickly as possible.]
+$footer[$username[$authorID]#$discriminator[$authorID], click any buttons to start.]
+$textSplit[$repeatMessage[2;$replaceText[💐 🌹 🌷 🌻 🍁 🍄 🌺 🌸 💮 🏵️ 🌼 🪴 ; ;-]];-]
+
+$var[i;1]
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]]
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]]
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]]
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]]
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;$random[1;$sub[26;$var[i]]]] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]] 
+$var[split;1] $var[c$var[i];$optOff[$splitText[$var[split]]]] $optOff[$removeSplitTextElement[$var[split]]] $var[i;$sum[$var[i];1]]
+
+$var[i;1]
+$c[snowflake@num]
+$addButton[yes;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+
+$addButton[yes;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+
+$addButton[yes;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;kkkkk-ThisIsJustAnIndicator;;secondary;yes;✅]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+
+$addButton[yes;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+
+$addButton[yes;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+$addButton[no;1@$var[tot]@mematchcard@$var[i];;secondary;no;❔] $var[i;$sum[$var[i];1]]
+
+
+
+
+$jsonParse[{
+    "cards": "$var[c1]-$var[c2]-$var[c3]-$var[c4]-$var[c5]-$var[c6]-$var[c7]-$var[c8]-$var[c9]-$var[c10]-$var[c11]-$var[c12]-$var[c13]-$var[c14]-$var[c15]-$var[c16]-$var[c17]-$var[c18]-$var[c19]-$var[c20]-$var[c21]-$var[c22]-$var[c23]-$var[c24]",
+    "selected": "0",
+    "current": "",
+    "start": "$getTimestamp",
+    "score": "0",
+    "customid": ""
+}]
+
+
+
+$setUserVar[memorymatchdata;$jsonStringify;$authorID]
+
+$var[a;1]
+$c[sendMessage[$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]
+$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]
+$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]⬛$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]
+$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]
+$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]$var[c$var[a]]$var[a;$sum[$var[a];1]]
+]
+
+prefix: $onInteraction
+code:
+$c[LANJUTAN DARI COMMAND MEMORY MATCH]
+
+$nomention
+$onlyIf[$checkContains[$customID;@mematchcard@]==true;]
+
+$jsonParse[$getUserVar[memorymatchdata;$authorID]]
+$var[cards;$json[cards]]
+$var[selected;$json[selected]]
+$var[current;$json[current]]
+$var[start;$json[start]]
+$var[score;$json[score]]
+
+$if[$checkContains[$getEmbedData[$channelID;$messageID;1;footer];$username[$authorID]#$discriminator[$authorID]]==true]
+        $title[🧠 Memory Match]
+        $if[$var[selected]==0]
+        $textSplit[$customID;@]
+        $var[tot;$splitText[2]]
+        $var[car;$splitText[4]]
+        $textSplit[$json[cards];-]
+        $description[$splitText[$var[car]]❓]
+        $color[6495ED]
+        $footer[$username[$authorID]#$discriminator[$authorID]: 💥 $json[score]    ⏰ $sub[$getTimestamp;$json[start]] sec.]
+        $editButton[$customID;;primary;no;$splitText[$var[car]]]
+        $editButton[kkkkk-ThisIsJustAnIndicator;;secondary;yes;✅]
+        $jsonSet[selected;1]
+        $jsonSet[current;$splitText[$var[car]]]
+        $jsonSet[customid;$customID]
+
+    $elseif[$var[selected]==1]
+        $textSplit[$customID;@]
+        $var[tot;$splitText[2]]
+        $var[car;$splitText[4]]
+        $textSplit[$json[cards];-]
+        $var[currentcard;$json[current]]
+
+        $if[$var[currentcard]!=$splitText[$var[car]]]
+            $editButton[$customID;;danger;no;$splitText[$var[car]]]
+            $editButton[$json[customid];;danger;no;$var[currentcard]]
+            $description[$var[currentcard]  $splitText[$var[car]]]
+            $footer[Oopse that didnt match!]
+            $color[6495ED]
+            $jsonSet[selected;0]
+            $jsonSet[current;-]
+            $editButton[kkkkk-ThisIsJustAnIndicator;;secondary;yes;⏰]
+            $async[hsh]
+                $replyIn[2]
+                $editButton[$customID;;secondary;no;❔;$messageID]
+                $editButton[$json[customid];;secondary;no;❔;$messageID]
+            $endasync
+            
+            $async[hsyh]
+                $replyIn[3]
+                $editButton[kkkkk-ThisIsJustAnIndicator;;secondary;yes;✅;$messageID]
+                $editMessage[$channelID;$messageID;<@$authorID>;🧠 Memory Match;❓  ❓;6495ED;$username[$authorID]#$discriminator[$authorID]: 💥 $json[score]    ⏰ $sub[$getTimestamp;$json[start]] sec.]
+            $endasync
+
+
+        $else
+            $jsonSet[score;$sum[$json[score];1]]
+            $onlyIf[$customID!=$json[customid];]
+            
+
+            $if[$json[score]==12]
+                $footer[$username[$authorID]#$discriminator[$authorID] 💥 $json[score]    ⏰ $sub[$getTimestamp;$json[start]]]
+                $color[6495ED]
+                $description[Congratulations! You completed the memory match in **$sub[$getTimestamp;$json[start]] seconds**]
+                $editButton[$customID;;success;yes;$splitText[$var[car]]]
+                $editButton[$json[customid];;success;yes;$var[currentcard]]
+                $jsonSet[selected;0]
+
+            $else
+            
+                $footer[Wow thats a match! Awesome.]
+                $color[6495ED]
+                $description[$var[currentcard]  $splitText[$var[car]]]
+                $editButton[$customID;;success;yes;$splitText[$var[car]]]
+                $editButton[$json[customid];;success;yes;$var[currentcard]]
+                $editButton[kkkkk-ThisIsJustAnIndicator;;secondary;yes;⏰]
+                $jsonSet[selected;0]
+
+                $async[hsh8]
+                    $replyIn[2]
+                    $editButton[kkkkk-ThisIsJustAnIndicator;;secondary;yes;✅;$messageID]
+                    $editMessage[$channelID;$messageID;<@$authorID>;🧠 Memory Match;❓  ❓;6495ED;$username[$authorID]#$discriminator[$authorID]: 💥 $json[score]    ⏰ $sub[$getTimestamp;$json[start]] sec.]
+                $endasync
+            $endif
+        $endif
+    $endif
+    $setUserVar[memorymatchdata;$jsonStringify]
+
+$endif
+  
