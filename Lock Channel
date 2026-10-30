@@ -1,0 +1,69 @@
+slash: /lock channel
+opsi:
+channel - channel - wajib
+message - text
+code:
+$nomention
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;managechannels]==false]
+$ephemeral
+$username[$botID] need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$modifyChannelPerms[$message[channel];-sendmessages;$guildID]!=]
+$ephemeral
+The channel has already been locked.
+$stop
+$endif
+
+$try
+$modifyChannelPerms[$message[channel];-sendmessages;$guildID]
+$endtry
+
+$ephemeral
+https://discord.com/channels/$guildID/$message[channel]/$message[channel]
+
+$try
+$sendEmbedMessage[$message[channel];;Channel Locked;;Note: $message[message];6495ED;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+slash: /unlock channel
+opsi:
+channel - channel - wajib
+message - text
+code:
+$nomention
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;managechannels]==false]
+$ephemeral
+$username[$botID] need permission `Manage Channel`.
+$stop
+$endif
+
+$if[$modifyChannelPerms[$message[channel];+sendmessages;$guildID]!=]
+$ephemeral
+The channel has already been unlocked.
+$stop
+$endif
+
+$try
+$modifyChannelPerms[$message[channel];+sendmessages;$guildID]
+$endtry
+
+$ephemeral
+https://discord.com/channels/$guildID/$message[channel]/$message[channel]
+
+$try
+$sendEmbedMessage[$message[channel];;Saluran Tidak Terkunci;;<:emoji_51:1380852058051055636> $message[message];d2042d;$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;https://cdn.discordapp.com/attachments/1195571870712463521/1385903604837122109/20250621_164435.png?ex=6857c2d0&is=68567150&hm=0f2ba04da49db3e6621279e50d832373ea4fa3242c815ce90e63835de0226128&;;yes;no]
+$endtry
