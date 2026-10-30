@@ -205,3 +205,281 @@ $else
     $addButton[true;ServerBannedUser-$authorID;Search a User;secondary;false;👤]
     $addButton[false;ServerBanListPage-$authorID;A Specific Page;secondary;false;📝]
 $endif
+
+prefix: $onInteraction
+code:
+$c[LANJUTAN COMMAND LIST BAN]
+
+$nomention
+$botListHide
+
+$textSplit[$customID;-]
+
+$if[$splitText[1]==ServerBannedUser]
+    $if[$splitText[2]==$authorID]
+        $if[$or[$isAdmin[$authorID]==true;$checkUserPerms[$authorID;ban]==true]==false]
+            $ephemeral
+            $removeAllComponents
+            You don't have enough permissions to use this!
+        $else
+            $newModal[Given.Banned.UserID;Guild Banned Users List]
+            $addTextInput[user.id;short;User ID of a banned user;15;22;true;;$botID]
+        $endif
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif
+$endif
+
+$if[$splitText[1]==Given.Banned.UserID]
+    $ephemeral
+    $var[color;6495ED]
+    
+    $if[$or[$isAdmin[$authorID]==true;$checkUserPerms[$authorID;ban]==true]==false]
+        You don't have enough permissions to use this!
+        $stop
+    $endif
+    
+    $if[$or[$isAdmin[$botID]==true;$checkUserPerms[$botID;ban]==true]==false]
+        $username[$botID] needs `BAN` Permission to view banned users!
+        $stop
+    $endif
+  
+    $if[$userExists[$input[user.id]]==false]
+        `$input[user.id]` is an Invalid UserID
+    $else
+        $var[user;$input[user.id]]
+        
+        $try
+          $var[reason;$getBanReason[$var[user]]]
+          $var[username;$username[$var[user]]]
+          $var[avatar;$userAvatar[$var[user]]]
+          $var[newline;$url[decode;%0A]]
+           
+          $author[$serverName[$guildID]]
+          $authorIcon[$serverIcon[$guildID]]
+          $description[» **Mention:** <@$var[user]>$var[newline]» **Reason:** $var[reason]]
+          $footer[Username: $var[username]]
+          $color[$var[color]]
+          $thumbnail[$var[avatar]]
+        $catch
+          That user isn't banned in this server!
+        $endtry
+    $endif
+$endif
+
+$if[$splitText[1]==ServerBanListPage]
+    $if[$splitText[2]==$authorID]
+        $if[$or[$isAdmin[$authorID]==true;$checkUserPerms[$authorID;ban]==true]==false]
+            $ephemeral
+            $removeAllComponents
+            You don't have enough permissions to use this!
+        $else
+            $newModal[Guild.Ban.UsersList.CustomPage;Guild Banned Users List]
+            $addTextInput[page.number;short;Page Number;1;10;true;;7]
+        $endif
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif     
+$endif
+
+$if[$splitText[1]==Guild.Ban.UsersList.CustomPage]
+    $var[page;$input[page.number]]
+    $ephemeral
+    
+    $if[$or[$isAdmin[$authorID]==true;$checkUserPerms[$authorID;ban]==true]==false]
+        You don't have enough permissions to use this!
+        $stop
+    $endif
+    
+    $if[$or[$isAdmin[$botID]==true;$checkUserPerms[$botID;ban]==true]==false]
+        $username[$botID] needs `BAN` Permission to view banned users!
+        $stop
+    $endif
+    
+    $var[color;6495ED]
+
+    $httpAddHeader[apikey;$getVar[ApiKey]]
+    $httpAddHeader[bot-token;$getVar[BotToken]]
+    $httpAddHeader[guild-id;$guildID] 
+     $httpGet[https://bdfddata.rickyjs.xyz/release/guild/bans]
+     $jsonParse[$httpResult]
+         
+     $var[details.length;$jsonArrayCount[details]]
+        
+     $async[math]
+        $textSplit[$replaceText[$getEmbedData[$channelID;$messageID;1;footer];Page;];/]
+        $var[current.page;$splitText[1]]
+          
+        $enableDecimals[true]
+        $var[div;$divide[$var[details.length];10]]
+          
+        $if[$checkContains[$var[div];.]==true]
+            $textSplit[$var[div];.]
+            $var[total.pages;$sum[$splitText[1];1]]
+        $else
+            $var[total.pages;$splitText[1]]
+        $endif
+     $endasync $await[math]
+    
+    $if[$isNumber[$var[page]]==false]
+        Please input a valid number!
+    $elseif[$checkContains[$var[page];.]==true]
+        You can not have decimals/floats in your number!
+    $elseif[$var[page]<=0]
+        You can not have `0` or a negative number!
+    $elseif[$var[page]>$var[total.pages]]
+        Page `$var[page]` does not exist!
+    $else
+        $var[final.point;$multi[$var[page];10]]
+        
+        $var[q;$sub[$sub[$var[final.point];9];1]]
+        $var[sep;$url[decode;%0A]]
+        $var[users;$eval[$repeatMessage[10;%{DOL}%if[%{DOL}%json[details\;%{DOL}%var[q\]\]!=\]%{DOL}%sum[%{DOL}%var[q\]\;1\]. %{DOL}%var[get.user\;%{DOL}%json[details\;%{DOL}%var[q\]\;user\;id\]\]<@%{DOL}%var[get.user\]> ***(@%{DOL}%username[%{DOL}%var[get.user\]\])***%{DOL}%var[reason\;%{DOL}%replaceText[%{DOL}%replaceText[%{DOL}%json[details\;%{DOL}%var[q\]\;reason\]\;`\;\]\;%{DOL}%var[sep\]\; \]\] - %{DOL}%trimSpace[%{DOL}%if[%{DOL}%var[reason\]==\]`No reason given.`%{DOL}%else `%{DOL}%var[reason\]`%{DOL}%endif\]%{DOL}%var[sep\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\] + 1\]\]]]]
+
+        $authorIcon[$serverIcon[$guildID]]
+        $author[$serverName[$guildID]]
+        $title[*Page $var[page]*]
+        $description[$var[users]]
+        $color[$var[color]]
+    $endif
+$endif
+
+$if[$splitText[1]==GuildUsersBanList]
+    $if[$splitText[2]==$authorID]
+        $if[$or[$isAdmin[$authorID]==true;$checkUserPerms[$authorID;ban]==true]==false]
+            $ephemeral
+            $removeAllComponents
+            You don't have enough permissions to use this!
+            $stop
+        $endif
+        
+        $if[$or[$isAdmin[$botID]==true;$checkUserPerms[$botID;ban]==true]==false]
+            $ephemeral
+            $removeAllComponents          
+            $username[$botID] needs `BAN` Permission to view banned users!
+            $stop
+        $endif
+        
+        $var[first.page.arrow;<:emoji_45:1379423199003021312>]
+        $var[last.page.arrow;<:emoji_48:1379423272982020146>]
+        $var[next.page.arrow;<:emoji_47:1379423248231698532>]
+        $var[prev.page.arrow;<:emoji_46:1379423227419562045>]
+        $var[red.cross;<:emoji_49:1379426088673087578>]
+        $var[color;6495ED]
+        
+        $removeAllComponents
+        $async[]
+          $editButton[GuildUsersBanList-$authorID-FirstPage;;primary;true;$var[first.page.arrow];$messageID]
+          $editButton[GuildUsersBanList-$authorID-PrevPage;;primary;true;$var[prev.page.arrow];$messageID]
+          $editButton[GuildUsersBanList-$authorID-NextPage;;primary;true;$var[next.page.arrow];$messageID]
+          $editButton[GuildUsersBanList-$authorID-LastPage;;primary;true;$var[last.page.arrow];$messageID]
+          $editButton[DeleteEmbedMsg-$authorID;;danger;true;$var[red.cross];$messageID]
+          $editButton[ServerBannedUser-$authorID;Search a User;secondary;true;👤;$messageID]
+          $editButton[ServerBanListPage-$authorID;A Specific Page;secondary;true;📝;$messageID]
+          $editMessage[$channelID;$messageID;;;Loading...;$var[color];$getEmbedData[$channelID;$messageID;1;footer]]
+        $endasync
+        
+        $c[ // ^ Disabling buttons until the page is fetched ]
+                     
+        $httpAddHeader[apikey;$getVar[ApiKey]]
+        $httpAddHeader[bot-token;$getVar[BotToken]]
+        $httpAddHeader[guild-id;$guildID] 
+         $httpGet[https://bdfddata.rickyjs.xyz/release/guild/bans]
+         $jsonParse[$httpResult]
+         
+         $var[details.length;$jsonArrayCount[details]]
+         
+         $if[$var[details.length]==0]
+             $author[$serverName[$guildID]]
+             $authorIcon[$serverIcon[$guildID]]
+             $description[There are no banned users!]
+             $color[$var[color]]
+             $stop
+         $endif
+        
+        $defer      
+        $async[math]
+          $textSplit[$replaceText[$getEmbedData[$channelID;$messageID;1;footer];Page;];/]
+          $var[current.page;$splitText[1]]
+          
+          $enableDecimals[true]
+          $var[div;$divide[$var[details.length];10]]
+          
+          $if[$checkContains[$var[div];.]==true]
+              $textSplit[$var[div];.]
+              $var[total.pages;$sum[$splitText[1];1]]
+          $else
+              $var[total.pages;$splitText[1]]
+          $endif
+        $endasync $await[math]
+        
+        $if[$splitText[3]==FirstPage]
+            $var[final.point;$multi[1;10]]
+            $var[updated.page;1]
+        $elseif[$splitText[3]==LastPage]
+                $var[final.point;$multi[$var[total.pages];10]]
+                $var[updated.page;$var[total.pages]]
+        $elseif[$splitText[3]==PrevPage]
+                $var[final.point;$multi[$sub[$var[current.page];1];10]]
+                $var[updated.page;$sub[$var[current.page];1]]
+        $elseif[$splitText[3]==NextPage]
+            $var[final.point;$multi[$sum[$var[current.page];1];10]]
+            $var[updated.page;$sum[$var[current.page];1]]
+        $endif
+        
+        $if[$or[$var[updated.page]>$var[total.pages];$var[updated.page]<=0]==true]
+            $var[final.point;$multi[$var[total.pages];10]]
+            $var[updated.page;$var[total.pages]]
+        $endif
+        
+        $var[q;$sub[$sub[$var[final.point];9];1]]
+        $var[sep;$url[decode;%0A]]
+        $var[users;$eval[$repeatMessage[10;%{DOL}%if[%{DOL}%json[details\;%{DOL}%var[q\]\]!=\]%{DOL}%sum[%{DOL}%var[q\]\;1\]. %{DOL}%var[get.user\;%{DOL}%json[details\;%{DOL}%var[q\]\;user\;id\]\]<@%{DOL}%var[get.user\]> ***(@%{DOL}%username[%{DOL}%var[get.user\]\])***%{DOL}%var[reason\;%{DOL}%replaceText[%{DOL}%replaceText[%{DOL}%json[details\;%{DOL}%var[q\]\;reason\]\;`\;\]\;%{DOL}%var[sep\]\; \]\] - %{DOL}%trimSpace[%{DOL}%if[%{DOL}%var[reason\]==\]`No reason given.`%{DOL}%else `%{DOL}%var[reason\]`%{DOL}%endif\]%{DOL}%var[sep\]%{DOL}%else %{DOL}%stop%{DOL}%endif%{DOL}%var[q\;%{DOL}%calculate[%{DOL}%var[q\] + 1\]\]]]]
+
+        $authorIcon[$serverIcon[$guildID]]
+        $author[$serverName[$guildID]]
+        $title[Banned Users ($var[details.length])]
+        $description[$var[users]]
+        $footer[Page $var[updated.page]/$var[total.pages]] $c[ // <- Do not edit the footer ]
+        $color[$var[color]]
+        
+        $addButton[false;GuildUsersBanList-$authorID-FirstPage;;primary;$checkCondition[$var[updated.page]==1];$var[first.page.arrow]]
+        $addButton[false;GuildUsersBanList-$authorID-PrevPage;;primary;$checkCondition[$var[updated.page]==1];$var[prev.page.arrow]]
+        $addButton[false;GuildUsersBanList-$authorID-NextPage;;primary;$checkCondition[$var[total.pages]==$var[updated.page]];$var[next.page.arrow]]
+        $addButton[false;GuildUsersBanList-$authorID-LastPage;;primary;$checkCondition[$var[total.pages]==$var[updated.page]];$var[last.page.arrow]]
+        $addButton[false;DeleteEmbedMsg-$authorID;;danger;false;$var[red.cross]]
+        $addButton[true;ServerBannedUser-$authorID;Search a User;secondary;false;👤]
+        $addButton[false;ServerBanListPage-$authorID;A Specific Page;secondary;false;📝]
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif
+$endif
+
+$if[$splitText[1]==DeleteEmbedMsg]
+    $if[$splitText[2]==$authorID]
+        $var[RepliedMessageID;$repliedMessageID[$channelID;$messageID]]
+           $try
+              $if[$var[RepliedMessageID]==]
+                  $deleteMessage[$channelID;$messageID]
+              $else
+                  $deleteMessage[$channelID;$var[RepliedMessageID]]
+                  $deleteMessage[$channelID;$messageID]
+              $endif
+           $catch
+              $ephemeral
+              $removeAllComponents
+              $description[I do not have `Manage Messages` Permissions!]
+              $color[6495ED]
+           $endtry
+    $else
+        $ephemeral
+        $removeAllComponents
+        This is not your button!
+    $endif
+$endif
