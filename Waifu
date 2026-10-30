@@ -1,0 +1,13 @@
+slash: /waifu
+code:
+$nomention
+$if[$guildID!=]
+The command only works on the server!
+$else
+$embedSuppressErrors[;Api is down or something is wrong join my support server and report this![Support Server\](https://discord.gg/hvwZCXWEnh);6495ED;]
+$httpGet[https://api.waifu.pics/sfw/waifu]
+$color[6495ED]
+$author[This is your waifu]
+$authorIcon[$userAvatar[$authorID]]
+$image[$httpResult[url]]
+$addButton[no;more;More;secondary;no;;]
