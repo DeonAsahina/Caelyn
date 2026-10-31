@@ -22,3 +22,47 @@ $addButton[no;embedENABLE-$authorID;Enable;success;yes;;]
 $addButton[no;embedDISABLE-$authorID;Disable;danger;no;;]
 $endif
      $endif
+
+prefix: $onInteraction
+$c[PERINTAH LANJUTAN LOG MODERATOR]
+$nomention
+$if[$and[$checkContains[$customID;embedENABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==embedENABLE-$authorID]
+$setServerVar[eMbed;Enabled]
+$title[Moderation Log]
+$description[> The Moderation Log is an automated system that tracks all moderation actions carried out by administrators, moderators, and bots within the server.
+> 
+> **Embed Message:**
+> Status: $getServerVar[eMbed]]
+$color[6495ED]
+$editButton[embedDISABLE-$authorID;Disable;danger;no;;]
+$editButton[embedENABLE-$authorID;Enable;success;yes;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;embedDISABLE]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$customID==embedDISABLE-$authorID]
+$setServerVar[eMbed;Disabled]
+$title[Moderation Log]
+$description[> The Moderation Log is an automated system that tracks all moderation actions carried out by administrators, moderators, and bots within the server.
+> 
+> **Embed Message:**
+> Status: $getServerVar[eMbed]]
+$color[6495ED]
+$editButton[embedDISABLE-$authorID;Disable;danger;yes;;]
+$editButton[embedENABLE-$authorID;Enable;success;no;;]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;SETTING]==true;$checkContains[$customID;$authorID]==true]]
+     $if[$message==setChannelid-$authorID]
+     $newModal[Channelidsetup-$authorID;Channelid]
+     $addTextInput[SetChan;short;CHANNELID;;;yes;;ID channel where you want to send the embed.]
+     $endif
+$endif
+
+$if[$and[$checkContains[$customID;Channelidsetup]==true;$checkContains[$customID;$authorID]==true]]
+$setServerVar[channelidVar;$input[SetChan]]
+$ephemeral
+Successfully set up.
+$endif
