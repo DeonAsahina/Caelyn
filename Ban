@@ -483,3 +483,71 @@ $if[$splitText[1]==DeleteEmbedMsg]
         This is not your button!
     $endif
 $endif
+
+prefix: /ban id
+opsi:
+id - text - wajib
+reason - text
+code:
+$nomention
+$var[e;<:emoji_41:1477114344981659648>]
+$var[color;6495ED]
+
+$if[$isBot[$message[id]]==true]
+$ephemeral
+I cannot ban myself.
+I cannot ban other bots.
+$stop
+$endif
+
+$if[$checkUserPerms[$authorID;ban]==false]
+$ephemeral
+You need permission to use this command.
+$stop
+$endif
+
+$if[$message[id]==$botID]
+$ephemeral
+I cannot ban myself.
+$stop
+$endif
+
+$if[$message[id]==$authorID]
+$ephemeral
+You cannot ban yourself.
+$stop
+$endif
+ 
+$if[$message[id]==$serverOwner]
+$ephemeral
+You cannot ban the server owner.
+$stop
+$endif
+
+$if[$isBanned[$message[id]]==true]
+$ephemeral
+The user has been banned.
+$stop
+$endif
+
+$banID[$message[reason];$message[id]]
+
+$title[$var[e] Ban ID]
+$description[
+> **User ID:** $message[id]
+> **Reason:** $message[2;reason]
+]
+$addTimestamp
+$color[d2042d]
+
+$try
+$sendEmbedMessage[$dmChannelID[$message[user]];;$var[e] Ban ID;;> **User:** <@$message[user]>
+> **Reason:** $message[reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+$endtry
+
+$if[$getServerVar[eMbed]==Enabled]
+   $try
+   $sendEmbedMessage[$getServerVar[channelidVar];;$var[e] Ban ID;;> **User:** <@$message[user]>
+   > **Reason:** $message[reason];$var[color];$serverName[$guildID];$serverIcon[$guildID];$username;$authorAvatar;;;yes;no]
+   $endtry
+$endif
