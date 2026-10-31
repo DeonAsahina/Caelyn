@@ -1,0 +1,24 @@
+slash: /log moderation
+code:
+$nomention
+     $if[$checkUserPerms[$authorID;admin]==false]
+$ephemeral
+`Manage Server` permission is required!
+     $else
+$title[Moderation Log]
+$description[> The Moderation Log is an automated system that tracks all moderation actions carried out by administrators, moderators, and bots within the server.
+> 
+> **Embed Message:**
+> Status: $getServerVar[eMbed]]
+$color[6495ED]
+$newSelectMenu[SETTING-$authorID;1;1;Settings]
+$addSelectMenuOption[SETTING-$authorID;Enter the channel ID;setChannelid-$authorID;Configure the channel ID;;<:emoji_42:1477120573967696042>;]
+$addButton[yes;1;‎ ‎ ‎ Embed:‎ ‎  ‎ ;secondary;yes;;]
+$if[$getServerVar[eMbed]==Disabled]
+$addButton[no;embedENABLE-$authorID;Enable;success;no;;]
+$addButton[no;embedDISABLE-$authorID;Disable;danger;yes;;]
+$else
+$addButton[no;embedENABLE-$authorID;Enable;success;yes;;]
+$addButton[no;embedDISABLE-$authorID;Disable;danger;no;;]
+$endif
+     $endif
