@@ -1,0 +1,74 @@
+slash: /info emoji
+opsi:
+emoji - text - wajib
+code:
+$nomention
+$reply
+$allowUserMentions[]
+ 
+$c[⁠▽ You'll need an API Key in order to use this code ▽] 
+ 
+$c[▽ Visit -> https://dadocs.rickyjs.xyz/ for more information ▽]
+ 
+$if[$isSlash==true]
+    $var[input;$message[emoji]]
+$else
+    $if[$message[1]==]
+        $ephemeral
+        Please enter an emoji to display.
+        $stop
+    $endif
+    $var[input;$message[1]]
+$endif
+ 
+$var[color;6495ED]
+$var[api-key;$getVar[ApiKey]]
+ 
+$if[$checkContains[$var[input];:]==true]
+    $textSplit[$var[input];:]
+    
+    $var[animated?;$checkContains[$splitText[1];a]]    
+    $var[emoji-id;$replaceText[$splitText[3];>;]]
+    
+    $httpGet[https://cdn.discordapp.com/emojis/$var[emoji-id].$replaceText[$replaceText[$var[animated?];true;gif];false;png]]
+    
+    $if[$httpGetHeader[Content-Type]==]
+        Invalid custom emoji provided.
+    $else
+        $var[emoji-name;$splitText[2]]
+        $var[emoji-creation;$calculate[($var[emoji-id] / 4194304 + 1420070400000) / 1000 ]]
+        
+        $if[$var[emoji-name]==]
+            Invalid custom emoji provided.
+        $else
+            $author[Emoji Enlarged!]
+            $authorIcon[$authorAvatar]
+            $addField[Emoji Name;$var[emoji-name]]
+            $addField[Animated?;$var[animated?]]
+            $addField[Created on;<t:$var[emoji-creation]> (<t:$var[emoji-creation]:R>)]
+            
+            $image[https://cdn.discordapp.com/emojis/$var[emoji-id].$replaceText[$replaceText[$var[animated?];true;gif];false;png]]
+            $footer[Emoji ID: $var[emoji-id]]
+            $color[$var[color]]
+        $endif
+    $endif
+$else   
+    $if[$or[$isNumber[$var[input]]==true;$checkContains[$toLowercase[$var[input]];a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z]==true]]
+        $ephemeral
+        Invalid emoji provided.
+    $else
+        $httpAddHeader[apikey;$var[api-key]]
+        $httpPost[https://bdfddata.rickyjs.xyz/release/emoji-info;{
+           "emoji": "$var[input]"
+         }]
+        
+        $authorIcon[$authorAvatar]
+        $author[Emoji Enlarged!]
+        $addField[Unicode Emoji Name;\$var[input]]
+        $addField[Encoded Format;$url[encode;$var[input]]]
+        $addField[Hex Format;$httpResult[details;unicodeHex]]
+        
+        $image[$httpResult[details;twemoji]]
+        $color[$var[color]]
+    $endif
+$endif
