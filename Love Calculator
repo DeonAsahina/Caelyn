@@ -1,0 +1,34 @@
+prefix: c.lovecalculator
+code:
+$nomention
+$onlyIf[$findUser[user]!=;Pilih seseorang dulu 💘]
+$onlyIf[$authorID!=$findUser[user];Masa sama diri sendiri 😅]
+
+$var[id1;$authorID]
+$var[id2;$findUser[user]]
+
+$if[$var[id1]>$var[id2]]
+$var[result;$calculate[($var[id2]+$var[id1])%100+1]]
+$else
+$var[result;$calculate[($var[id1]+$var[id2])%100+1]]
+$endif
+
+$title[💖 Kalkulator Cinta]
+$description[
+**$username[$authorID]** 💘 **$username[$findUser[user]]**
+
+🩸 Persentase Cinta: `$var[result]%`
+
+$if[$var[result]>=80]
+😳 Ini mah tinggal nunggu undangan
+$elseif[$var[result]>=60]
+😏 Lumayan, jangan keburu baper
+$elseif[$var[result]>=40]
+🤡 HTS detected
+$elseif[$var[result]>=20]
+💀 Cinta sepihak vibes
+$else
+🚩 STOP. Mundur sebelum trauma
+$endif
+]
+$color[FFFAFA]
