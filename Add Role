@@ -92,3 +92,46 @@ $description[
 ]
 $addTimestamp
 $color[6495ED]
+
+slash: /delete role
+opsi:
+role - role - wajib
+code:
+$nomention
+$if[$checkUserPerms[$authorID;manageroles]==]
+$ephemeral
+Kamu tidak memiliki izin `Manage Roles`
+$stop
+$endif
+
+$if[$checkUserPerms[$botID;manageroles]==]
+$ephemeral
+$username[$botID] need `Manage Roles`permission
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$authorID]]>$rolePosition[$message[role]]]
+$ephemeral
+Kamu tidak dapat menghapus peran karena <@&$message[role]> posisinya lebih tinggi atau setara dengan peranmu.
+$stop
+$endif
+
+$if[$rolePosition[$highestRole[$botID]]>$rolePosition[$message[role]]]
+$ephemeral
+Saya tidak dapat menghapus peran <@&$message[role]> karena posisinya lebih tinggi atau setara dengan peran saya.
+$stop
+$endif
+
+$var[peranID;$findRole[$message[role]]]
+$var[namaPeran;$roleName[$var[peranID]]]
+
+$deleteRole[$findRole[$message[role]]]
+
+$thumbnail[https://cdn.discordapp.com/attachments/1386543316207665182/1387209206708568185/20250625_071318.png?ex=685c82bf&is=685b313f&hm=246392cfe1b7eeb0904ff237e34e4060153cc1a52019cc650c335d07be71a006&]
+$title[Role Delete]
+$description[
+> **Nama Peran:** $var[namaPeran]
+> **ID Peran:** $message[role]
+]
+$color[d2042d]
+$addTimestamp
