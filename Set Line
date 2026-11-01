@@ -1,0 +1,27 @@
+/set line
+opsi:
+link - text - wajib
+code:
+$nomention
+$if[$guildID==]
+$ephemeral
+This command cannot be used in DMs!
+$else
+
+$if[$checkUserPerms[$authorID;managechannels]==false]
+$ephemeral
+You don't have permission `Manage Channels`
+$else
+
+$if[$checkContains[$message[link];http://;https://]==false]
+$ephemeral
+Link must start with http:// or https://
+$else
+
+$setChannelVar[saluranid;$channelID]
+$setChannelVar[link;$message[link]]
+$ephemeral
+Successfully set up.
+$endif
+$endif
+$endif
