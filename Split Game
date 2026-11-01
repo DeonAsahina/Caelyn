@@ -1,0 +1,109 @@
+/split game
+code:
+$nomention
+$alternativeParsing
+$onlyIf[$guildID!=;]
+$onlyIf[$mentioned[1]!=;❌ Mention 2 users to play the game.]
+$onlyIf[$mentioned[2]!=;❌ Mention 2 users to play the game.]
+$onlyIf[$mentioned[1]!=$mentioned[2];❌ Both players must be different.]
+$async[SOS]
+$setChannelVar[p1SOS;$mentioned[1];$channelID]
+$setChannelVar[p2SOS;$mentioned[2];$channelID]
+$setChannelVar[p1ChoiceSOS;None;$channelID]
+$setChannelVar[p2ChoiceSOS;None;$channelID]
+$var[channel;$channelID]
+
+
+$var[message;$sendEmbedMessage[$var[channel];;;;
+🎮 **Split or Steal Game Started!**
+
+**<@$mentioned[1]>** vs **<@$mentioned[2]>**
+Choose <t:$sum[$getTimestamp;30]:R> ( **30 Seconds** )
+**Choose wisely**
+> If both Split ➜ Share the half half prize 🤝
+> If one Steals ➜ Take it all 💰
+> If both Steal ➜ Nobody wins ❌
+;FFFFF;;;;;;;;yes]]
+
+$addButton[no;split;SPLIT;secondary;no;🤝;$var[message]]
+$addButton[no;steal;STEAL;secondary;no;💰;$var[message]]
+$endasync
+$await[SOS]
+$replyIn[30s]
+$if[$or[$getChannelVar[p1ChoiceSOS;$channelID]==None;$getChannelVar[p2ChoiceSOS;$channelID]==None]]
+$removeButtons[$var[message]]
+$editMessage[$var[channel];$var[message];;;🎉 **Split or Steal Results!**
+
+<@$getChannelVar[p1SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p1ChoiceSOS;$channelID]**]
+<@$getChannelVar[p2SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p2ChoiceSOS;$channelID]**];FFFFF;]
+$endif
+
+$onInteraction
+code:
+$nomention
+$if[$checkContains[$customID;steal;split]]
+   $if[$customID==split]
+   $if[$getChannelVar[p1SOS;$channelID]==$authorID]
+$onlyIf[$getChannelVar[p1ChoiceSOS;$channelID]==None;]
+$setChannelVar[p1ChoiceSOS;split;$channelID]
+
+   $elseif[$getChannelVar[p2SOS;$channelID]==$authorID]
+$onlyIf[$getChannelVar[p2ChoiceSOS;$channelID]==None;]
+$setChannelVar[p2ChoiceSOS;split;$channelID]
+   $endif
+
+
+   $elseif[$customID==steal]
+   $if[$getChannelVar[p1SOS;$channelID]==$authorID]
+$onlyIf[$getChannelVar[p1ChoiceSOS;$channelID]==None;]
+$setChannelVar[p1ChoiceSOS;steal;$channelID]
+   $elseif[$getChannelVar[p2SOS;$channelID]==$authorID]
+$onlyIf[$getChannelVar[p2ChoiceSOS;$channelID]==None;]
+$setChannelVar[p2ChoiceSOS;steal;$channelID]
+   $endif
+   $endif
+
+
+
+$c[Results]
+
+$if[$and[$getChannelVar[p1ChoiceSOS;$channelID]==steal;$getChannelVar[p2ChoiceSOS;$channelID]==split]]
+$removeButtons
+$color[FFFFF]
+$description[🎉 **Split or Steal Results!**
+**The Winner is:** <@$getChannelVar[p1SOS;$channelID]> 💰
+
+> <@$getChannelVar[p1SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p1ChoiceSOS;$channelID]**]
+> <@$getChannelVar[p2SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p2ChoiceSOS;$channelID]**]]
+$endif
+
+$if[$and[$getChannelVar[p1ChoiceSOS;$channelID]==split;$getChannelVar[p2ChoiceSOS;$channelID]==steal]]
+$removeButtons
+$color[FFFFF]
+$description[🎉 **Split or Steal Results!**
+**The Winner is:** <@$getChannelVar[p2SOS;$channelID]> 💰
+
+> <@$getChannelVar[p1SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p1ChoiceSOS;$channelID]**]
+> <@$getChannelVar[p2SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p2ChoiceSOS;$channelID]**]]
+$endif
+
+$if[$and[$getChannelVar[p1ChoiceSOS;$channelID]==split;$getChannelVar[p2ChoiceSOS;$channelID]==split]]
+$removeButtons
+$color[FFFFF]
+$description[🎉 **Split or Steal Results!**
+**Both share half—half prize** 🤝
+
+> <@$getChannelVar[p1SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p1ChoiceSOS;$channelID]**]
+> <@$getChannelVar[p2SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p2ChoiceSOS;$channelID]**]]
+$endif
+
+$if[$and[$getChannelVar[p1ChoiceSOS;$channelID]==steal;$getChannelVar[p2ChoiceSOS;$channelID]==steal]]
+$removeButtons
+$color[FFFFF]
+$description[🎉 **Split or Steal Results!**
+**It's Steal draw**
+
+> <@$getChannelVar[p1SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p1ChoiceSOS;$channelID]**]
+> <@$getChannelVar[p2SOS;$channelID]> chose: **$toUppercase[$getChannelVar[p2ChoiceSOS;$channelID]**]]
+$endif
+$endif
