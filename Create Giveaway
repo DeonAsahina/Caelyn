@@ -1,0 +1,338 @@
+slash: /create giveaway
+opsi:
+prize - text - wajib
+description - text
+winners - number
+joins - number
+required role - role
+blacklist role - role
+code:
+$nomention
+$onlyIf[$isSlash==true;]
+$ephemeral
+$defer
+
+$c[ For more information about API KEY, Visit -> https://dadocs.rickyjs.xyz/ ]
+  
+$var[\n;$url[decode;%0A]] $c[ Newline ]
+$var[default_color;$random[0;9999999]]
+
+$var[giveaway-participants.emoji;<:VA_Users:1254749214437675120>]
+$var[giveaway-enter.emoji;<:emoji_30:1473871416800710807>]
+$var[red-cross.emoji;<:VN_RedCross:1068802990657519686>]
+
+$var[blue-dot.emoji;•]
+$var[blue-cross.emoji;<:VN_BlueCross:1060446758779494452>]
+$var[tick.emoji;<:VN_BlueTick:1060584563572748369>]
+$var[right-arrow.emoji;<:emoji_34:1473959504260370442>]
+$var[time.emoji;⏰]
+
+$var[logsLimit.count;30] $c[❗ Keep this count reasonable and not something like '200' ]
+$var[max.giveaways.allowed;10] $c[ ⚠️ Must not go above 20 ]
+$var[defaultInteractionCooldown;45s] $c[ 🌸 Can change this to whatever but no short cooldown ]
+$var[db-api-key;$getVar[ApiKey]]
+
+$try
+  $onlyIf[$guildID!=;]
+$catch
+  You can't use this in here!
+  $stop
+$endtry
+
+$cooldown[$var[defaultInteractionCooldown];- $var[time.emoji] You are on cooldown! Try again <t:$sum[$getTimestamp;$getCooldown[normal]]:R>]
+
+$try
+  $httpAddHeader[apikey;$var[db-api-key]]
+  $httpPost[https://bdfddata.rickyjs.xyz/release/db/get;{
+     "name": "Giveaways_System-$guildID"
+  }]
+
+  $var[correct.json;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$httpResult[entries];$url[decode;%5C]u;≈u];"{;{];}";}];$url[decode;%5C];];"";"];"}";"}]]
+  $jsonParse[$var[correct.json]]
+$catch
+  There was an error! Please try again later
+  $stop
+$endtry
+
+$if[$json[giveaway-settings;manager-role]!=]
+    $if[$isAdmin[$authorID]==false]
+        $if[$roleExists[$json[giveaway-settings;manager-role]]==true]
+            $if[$hasRole[$authorID;$json[giveaway-settings;manager-role]]==false]          
+                - $var[blue-cross.emoji] You do not have the Giveaway Manager role <@&$json[giveaway-settings;manager-role]> in order to start a giveaway!
+                $stop
+            $endif
+        $else
+            Failed to find the Current Giveaway Manager Role!$var[\n]- $var[right-arrow.emoji] Please report this to an Admin/Owner of this server!
+            $stop
+        $endif  
+    $endif
+$else
+    $if[$isAdmin[$authorID]==false]
+        You do not have `Admin` permission to execute this command!
+        $stop
+    $endif
+$endif
+
+$if[$jsonExists[ongoing-giveaways]==false]
+    $jsonArray[ongoing-giveaways]
+$endif
+
+$if[$jsonArrayCount[ongoing-giveaways]>=$var[max.giveaways.allowed]]
+    You can't create any more giveaways as there are already `$var[max.giveaways.allowed]` giveaways running in the server!
+    $stop
+$endif
+
+$var[giveaway.prize;$replaceText[$replaceText[$replaceText[$replaceText[$message[prize];*;];";];`;];$var[\n];]]
+
+$if[$charCount[$var[giveaway.prize]]>=150]
+    Your Prize value is too big, please short it down to 150 characters or less!
+    $stop
+$endif
+
+$if[$message[description]!=]
+    $var[given.desc;$replaceText[$replaceText[$message[description];$var[\n];];";]]
+    
+    $if[$charCount[$var[given.desc]]>1000]
+        Your giveaway description went above 1000 characters, please short it down!
+        $stop
+    $else       
+        $var[giveaway.desc;> Message: $var[given.desc]$var[\n]$var[\n]]
+    $endif
+$else
+    $var[given.desc;null]
+$endif
+
+$var[giveaway.join.instruction;$var[right-arrow.emoji] Click on **Join** button below to enter!$var[\n]$var[\n]]
+
+$var[giveaway.generate.id;$replaceText[$replaceText[$optOff[$randomString[10]$randomString[10]];+;];/;]]
+
+$var[giveaway.host;$var[blue-dot.emoji] Hosted By: <@$authorID> ($username[$authorID])]
+
+$if[$message[winners]!=]
+    $var[giveaway.winners;$var[\n]$var[blue-dot.emoji] Winner(s): `$message[winners]`]
+    $var[gw.winners.select;$message[winners]]
+$else
+    $var[giveaway.winners;$var[\n]$var[blue-dot.emoji] Winner(s): `1`]
+    $var[gw.winners.select;1]
+$endif
+
+$if[$message[joins]!=]
+    $var[giveaway.joins;$var[\n]$var[blue-dot.emoji] Maximum Joins: `$message[joins]`]
+    $var[giveaway.footer;Entries: 0 / $message[joins]]
+    
+    $var[gw.maxJoinLimit;$message[joins]]
+$else
+    $var[giveaway.footer;Entries: 0 / ∞]
+    
+    $var[gw.maxJoinLimit;∞]
+$endif
+
+$if[$message[blacklisted-role]!=]
+    $var[gw.blacklistedRole;$message[blacklisted-role]]
+    $var[giveaway.blacklist.role;$var[\n]$var[blue-dot.emoji] Blacklisted Role: <@&$var[gw.blacklistedRole]>]
+$else
+    $var[gw.blacklistedRole;null]
+$endif
+
+$if[$message[required-role]!=]
+    $var[gw.requiredRole;$message[required-role]]
+    $var[giveaway.role;$var[\n]$var[blue-dot.emoji] Required Role: <@&$var[gw.requiredRole]>]
+$else
+    $var[gw.requiredRole;null]
+$endif
+
+$if[$and[$message[required-role]!=;$message[blacklisted-role]!=]==true]
+    $if[$message[required-role]==$message[blacklisted-role]]
+        Required & Blacklisted role can not be the __same__!
+        $stop
+    $endif
+$endif
+
+$var[gw.timestamps;$var[\n]$var[\n]$var[blue-dot.emoji] Started: **<t:$getTimestamp:R> (<t:$getTimestamp>)**]
+
+$var[content;$var[giveaway-enter.emoji] **GIVEAWAY** $var[giveaway-enter.emoji]]
+$var[title;$var[giveaway.prize]]
+$var[description;$var[giveaway.desc]$var[giveaway.join.instruction]$var[giveaway.host]$var[giveaway.joins]$var[giveaway.role]$var[giveaway.blacklist.role]$var[giveaway.winners]$var[gw.timestamps]]
+$var[color;$var[default_color]]
+$var[footer;$var[giveaway.footer]]
+
+$var[embed.id;$sendEmbedMessage[$channelID;$var[content];$var[title];$var[title-url];$var[description];$var[color];$var[author];$var[author-icon];$var[footer];$var[footer-icon];$var[thumbnail];$var[image];false;true]]
+
+$addButton[no;GiveawayEnter-$var[gw.requiredRole]-$var[gw.blacklistedRole];Join;primary;false;$var[giveaway-enter.emoji];$var[embed.id]]
+$addButton[no;GiveawayParticipants-NormalOpen;;secondary;false;$var[giveaway-participants.emoji];$var[embed.id]]
+$addButton[no;GiveawayEnd-$authorID;End;danger;false;$var[red-cross.emoji];$var[embed.id]]
+
+$async[ephemeral_message] Successfully created your giveaway! $endasync $await[ephemeral_message]
+
+$jsonSetString[server-giveaway-stats;total-giveaways-created;$sum[0$json[server-giveaway-stats;total-giveaways-created];1]]
+
+$jsonArrayUnshift[ongoing-giveaways;{ "chan-id": "$channelID", "msg-id": "$var[embed.id]", "host-id": "$authorID", "giveaway-id": "$var[giveaway.generate.id]", "participants": [\], "winners": [\], "last-reroll-winners": [\], "giveaway-info": { "prize": "$var[giveaway.prize]", "select-winners": "$var[gw.winners.select]", "max-joins": "$var[gw.maxJoinLimit]", "required-role": "$var[gw.requiredRole]", "blacklisted-role": "$var[gw.blacklistedRole]", "message": "$var[given.desc]", "color": "$var[color]", "started-timestamp": "$getTimestamp", "ended-timestamp": "null" } }]
+$jsonArrayUnshift[giveaway-general-logs;giveaway_started_logs;{ "timestamp": "$getTimestamp", "user": "$authorID", "action": "A giveaway was started", "message-link": "https://discord.com/channels/$guildID/$channelID/$var[embed.id]" }]
+
+$if[$jsonArrayCount[giveaway-general-logs;giveaway_started_logs]>$var[logsLimit.count]]
+    $var[pop;$jsonArrayPop[giveaway-general-logs;giveaway_started_logs]]
+$endif
+
+$var[final.value;$jsonStringify]
+
+$jsonClear
+
+$jsonSetString[name;Giveaways_System-$guildID]
+$jsonSetString[value;$var[final.value]]
+
+$httpPost[https://bdfddata.rickyjs.xyz/release/db/set;$jsonStringify]
+
+slash: /config giveaway
+code:
+$nomention
+$onlyIf[$isSlash==true;]
+$defer
+
+$c[ For more information about API KEY, Visit -> https://dadocs.rickyjs.xyz/ ]
+
+$var[\n;$url[decode;%0A]] $c[ Newline ]
+$var[\n.space;$url[decode;%0A++]]
+
+$var[giveaway-enter.emoji;<:emoji_30:1473871416800710807>]
+
+$var[blue-dot.emoji;<:VN_BlueDot:1054626979720216656>]
+$var[blue-cross.emoji;<:VN_BlueCross:1060446758779494452>]
+$var[tick.emoji;<:VN_BlueTick:1060584563572748369>]
+$var[right-arrow.emoji;<a:VN_BlueArrow:1054432285212028939>]
+$var[red-cross.emoji;<:VN_RedCross:1068802990657519686>]
+
+$var[refresh.emoji;<:VA_Refresh:1259594294872772650>]
+$var[manager.emoji;<:VA_Manager:1384206136361877524>]
+$var[info.emoji;<:infosymbol:1063775849209405470>]
+$var[trophy.emoji;<a:VA_Trophy:1386638447007109151>]
+$var[warning.emoji;<:VA_Warning:1259590539339370590>]
+$var[question.emoji;<a:VA_QuestionMark:1259595087868858490>]
+
+$var[default_color;ffffff]
+$var[logs.emoji;📜]
+$var[note.emoji;📝]
+$var[numbers.emoji;🔢]
+
+$try
+  $onlyIf[$guildID!=;]
+$catch
+  $ephemeral
+  You can't use this here!
+  $stop
+$endtry
+
+$if[$isAdmin[$authorID]==false]
+    $ephemeral
+    You need `Admin` permissions in order to use this command!
+    $stop
+$endif
+
+$try
+  $httpAddHeader[apikey;$getVar[ApiKey]]
+  $httpPost[https://bdfddata.rickyjs.xyz/release/db/get;{
+     "name": "Giveaways_System-$guildID"
+  }]
+
+  $var[correct.json;$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$httpResult[entries];"{;{];}";}];$url[decode;%5C];];"";"];"}";"}]]
+  $jsonParse[$var[correct.json]]
+$catch
+  $ephemeral
+  There was an error! Please try again later
+  $stop
+$endtry
+
+$var[manager_role;$json[giveaway-settings;manager-role]]
+
+$var[total_rerolls;$json[server-giveaway-stats;total-rerolls]]
+$var[total_giveaways_ended;$json[server-giveaway-stats;total-giveaways-ended]]
+$var[total_giveaways_created;$json[server-giveaway-stats;total-giveaways-created]]
+$var[total_user_entries;$json[server-giveaway-stats;total-user-entries]]
+
+$if[$var[manager_role]==]
+    $var[manager.role.info;- $var[blue-cross.emoji] Giveaway Manager Role: Not Found]
+    $var[manager.role.moreInfo;$var[note.emoji] Currently only Server owner and Admins can create giveaways.]
+$else
+    $if[$roleExists[$var[manager_role]]==false]
+        $var[manager.role.info;- $var[blue-cross.emoji] Giveaway Manager Role: <@&$var[manager_role]>]
+        $var[manager.role.moreInfo;$var[note.emoji] Currently only Server owner and Admins can create giveaways.]
+
+        $var[manager.role.exists; `(Role doesn't exist!)`]
+    $else
+        $var[manager.role.info;- $var[tick.emoji] Giveaway Manager Role: <@&$var[manager_role]>]
+        $var[manager.role.moreInfo;$var[note.emoji] Only users with this role will be able to create giveaways!]
+
+        $var[manager.role.exists; `(Role available!)`]
+    $endif
+$endif
+
+$if[$var[total_rerolls]==]
+    $var[total_rerolls;0]
+$endif
+
+$if[$var[total_giveaways_ended]==]
+    $var[total_giveaways_ended;0]
+$endif
+
+$if[$var[total_giveaways_created]==]
+    $var[total_giveaways_created;0]
+$endif
+
+$if[$var[total_user_entries]==]
+    $var[total_user_entries;0]
+$endif
+
+$if[$jsonExists[total-resets]==false]
+    $var[resets.count;0]
+$else
+    $var[resets.count;$json[total-resets]]
+$endif
+
+$try
+  $var[ongoing_giveaways_count;$jsonArrayCount[ongoing-giveaways]]
+$catch
+  $var[ongoing_giveaways_count;0]
+$endtry
+
+$try
+  $var[giveawayCreate.slashId.info;- $var[info.emoji] Giveaway Create Command: </giveaway-create:$slashID[giveaway-create]> ]
+$catch
+  $var[giveawayCreate.slashId.info;- $var[info.emoji] Giveaway Create Command: `/giveaway-create`]
+$endtry
+
+$async[winners_count]
+  $if[$jsonExists[giveaway_winners_data]==false]
+      $var[winners_count;0]
+  $else
+      $jsonParse[$json[giveaway_winners_data]]
+      $textSplit[$jsonStringify;:{]
+      $removeSplitTextElement[1]
+      $var[winners_count;$getTextSplitLength]
+  $endif
+$endasync $await[winners_count]
+
+$var[giveaway-stats-msg;- $var[numbers.emoji] Giveaway Stats$var[\n.space]- Winners: $var[winners_count]$var[\n.space]- Total Rerolls: $var[total_rerolls]$var[\n.space]- Total User Entries: $var[total_user_entries]$var[\n.space]- Total Giveaways Created: $var[total_giveaways_created]$var[\n.space]- Total Giveaways Ended: $var[total_giveaways_ended]$var[\n.space]- Ongoing Giveaways: $var[ongoing_giveaways_count]]
+$var[manager-role-descMsg;$var[manager.role.info]$var[manager.role.exists]$var[\n.space]- **$var[manager.role.moreInfo]**]
+$var[config.info;- $var[right-arrow.emoji] This Config is only accessible to __**Admins and Server Owner**__!]
+$var[refresh.info;- $var[refresh.emoji] Last Refresh was <t:$getTimestamp:R>]
+$var[resetButton.info;- **$var[warning.emoji] Reset EVERYTHING** button can only be used by the __Server Owner__!]
+$var[resets.info;- `(Total Resets: $var[resets.count])`]
+
+$var[description;$var[manager-role-descMsg]$var[\n]$var[\n]$var[giveaway-stats-msg]$var[\n]$var[\n]$var[config.info]$var[\n]$var[giveawayCreate.slashId.info]$var[\n]$var[resetButton.info]$var[\n.space]$var[resets.info]$var[\n]$var[\n]$var[refresh.info]]
+
+$author[Giveaway System Configuration]
+$authorIcon[$authorAvatar?size=4096]
+
+$description[$var[description]]
+$thumbnail[$serverIcon[$guildID]?size=4096]
+
+$color[$var[default_color]]
+$footer[$serverName[$guildID]]
+
+$addButton[no;GiveawayManagerRoleSet-$authorID-OpenModal;Manager Role;primary;false;$var[manager.emoji]]
+$addButton[no;CurrentGiveaways-$authorID;Giveaways List;primary;false;$var[giveaway-enter.emoji]]
+$addButton[no;GiveawayLogs-$authorID;Giveaway Logs;success;false;$var[logs.emoji]]
+$addButton[no;GiveawayWinnersList-$authorID-Open;Winners List;success;false;$var[trophy.emoji]]
+$addButton[yes;GiveawayConfigRefresh-$authorID;Refresh;secondary;false;$var[refresh.emoji]]
+$addButton[no;GiveawayHelp-$authorID;Help;secondary;false;$var[question.emoji]]
+$addButton[no;GiveawaySysRESET-$authorID;Reset EVERYTHING;danger;$or[$jsonStringify=={"total-resets":"$var[resets.count]"};$jsonStringify=={}];$var[warning.emoji]]
+$addButton[no;GiveawayConfigEmbedDelete-$authorID;Close;danger;false;$var[red-cross.emoji]]
