@@ -1,0 +1,62 @@
+/set verification
+opsi:
+channel - channel - wajib
+role - role - wajib
+unverify role - role
+code:
+$nomention
+$if[$isSlash==true]
+$ephemeral
+$setChannelVar[ch;$message[channel]]
+$setChannelVar[rl;$message[role]]
+$setChannelVar[url;$message[unverify-role]]
+
+$author[System Verification]
+$authorIcon[$serverIcon]
+$description[Successfully created a verification system.]
+$footer[Press the Start button to begin the verification system.]
+$color[]
+$addButton[no;setverify;Start;primary;;;]
+$stop
+$endif
+
+$onInteraction[setverify]
+code:
+$nomention
+$removeAllComponents
+$var[ID;$sendEmbedMessage[$getChannelVar[ch];;;;
+Verification to access all channels in the server.
+;
+$getRoleColor[$highestRole[$botID]]
+;
+System Verification 
+;
+$serverIcon
+;;;;
+https://cdn.discordapp.com/attachments/1386543316207665182/1394482264154312867/retouch_1752540823575.jpg?ex=687849d0&is=6876f850&hm=9bc51086cdf6bc66e26ede6883ac5b2b8c531124bf25c3329ed49e452b7b87f3&
+;no;yes]]
+$addButton[no;verify;Verify;secondary;;;$var[ID]]
+
+$onInteraction[verify]
+code:
+$nomention
+$removeAllComponents
+$if[$roleExists[$getChannelVar[rl]]==true]
+$roleGrant[$authorID;+$getChannelVar[rl]]
+$roleGrant[$authorID;-$getChannelVar[url]]
+$ephemeral
+Verification successful.
+$stop
+$endif
+
+/reset verification 
+code:
+$nomention
+$if[$isSlash==true]
+$resetChannelVar[rl]
+$resetChannelVar[ch]
+$resetChannelVar[url]
+$ephemeral
+Successfully reset.
+$stop
+$endif
