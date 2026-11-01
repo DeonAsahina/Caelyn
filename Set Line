@@ -25,3 +25,10 @@ Successfully set up.
 $endif
 $endif
 $endif
+
+$alwaysReply
+code:
+$nomention
+$try
+$sendEmbedMessage[$getChannelVar[saluranid];;;;;;;;;;;$getChannelVar[link];no;no]
+$endtry
