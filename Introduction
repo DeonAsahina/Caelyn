@@ -21,3 +21,18 @@ $addTextInput[age2;short;Age:;2;2;yes;;How old are you?]
 $addTextInput[gender3;short;Gender:;4;6;yes;;Male/Female]
 $addTextInput[city4;short;City:;4;30;yes;;Where are you from?]
 $addTextInput[yourself5;paragraph;Tell me about yourself:;5;1000;yes;;I am a Developer]
+
+$onInteraction[bio]
+code:
+$nomention
+$thumbnail[$authorAvatar]
+$title[<:emoji_38:1476173490670407762> Bio]
+$description[- **Name:** [$input[name1]\](https://discord.com/users/$authorID)
+- **Age:** $input[age2]
+- **Gender:** $input[gender3]
+- **City:** $input[city4]
+- **About You:** $input[yourself5]]
+$color[6495ED]
+$footer[$serverName[$guildID]]
+$footerIcon[$serverIcon[$guildID]]
+$addButton[no;intro;Introduction;secondary;no;<:emoji_61:1390199344153759765>]
