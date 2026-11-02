@@ -1,0 +1,212 @@
+/menu role
+code:
+$nomention
+$onlyForIDs[$botOwnerID;$ephemeralSementara, command hanya bisa digunakan oleh developer.]
+
+$var[Roles;$roleNames]
+$var[roles;$var[Roles]]
+$var[roles;$replaceText[$var[Roles];$guildID;;-1]]
+ 
+$var[roles]
+$textSplit[$var[roles];, ]
+$removeSplitTextElement[$getTextSplitIndex[@everyone]]
+ 
+$if[$splitText[1]==]
+No roles in this server to display
+$else
+ 
+$newSelectMenu[Roles;1;1;Roles;]
+$if[$splitText[1]!=]
+$addSelectMenuOption[Roles;$splitText[1];role1-$authorID-$splitText[1];role 1;no;]
+$endif
+$if[$splitText[2]!=]
+$addSelectMenuOption[Roles;$splitText[2];role2-$authorID-$splitText[2];role 2;no;]
+$endif
+$if[$splitText[3]!=]
+$addSelectMenuOption[Roles;$splitText[3];role3-$authorID-$splitText[3];role 3;no;]
+$endif
+$if[$splitText[4]!=]
+$addSelectMenuOption[Roles;$splitText[4];role4-$authorID-$splitText[4];role 1;no;]
+$endif
+$if[$splitText[5]!=]
+$addSelectMenuOption[Roles;$splitText[5];role5-$authorID-$splitText[5];role 2;no;]
+$endif
+$if[$splitText[6]!=]
+$addSelectMenuOption[Roles;$splitText[6];role6-$authorID-$splitText[6];role 3;no;]
+$endif
+$if[$splitText[7]!=]
+$addSelectMenuOption[Roles;$splitText[7];role7-$authorID-$splitText[7];role 1;no;]
+$endif
+$if[$splitText[8]!=]
+$addSelectMenuOption[Roles;$splitText[8];role8-$authorID-$splitText[8];role 2;no;]
+$endif
+$if[$splitText[9]!=]
+$addSelectMenuOption[Roles;$splitText[9];role9-$authorID-$splitText[9];role 3;no;]
+$endif
+$if[$splitText[10]!=]
+$addSelectMenuOption[Roles;$splitText[10];role10-$authorID-$splitText[10];role 1;no;]
+$endif
+$if[$splitText[11]!=]
+$addSelectMenuOption[Roles;$splitText[11];role11-$authorID-$splitText[11];role 2;no;]
+$endif
+$if[$splitText[12]!=]
+$addSelectMenuOption[Roles;$splitText[12];role12-$authorID-$splitText[12];role 3;no;]
+$endif
+$if[$splitText[13]!=]
+$addSelectMenuOption[Roles;$splitText[13];role13-$authorID-$splitText[13];role 1;no;]
+$endif
+$if[$splitText[14]!=]
+$addSelectMenuOption[Roles;$splitText[14];role14-$authorID-$splitText[14];role 2;no;]
+$endif
+$if[$splitText[15]!=]
+$addSelectMenuOption[Roles;$splitText[15];role15-$authorID-$splitText[15];role 3;no;]
+$endif
+$if[$splitText[16]!=]
+$addSelectMenuOption[Roles;$splitText[16];role16-$authorID-$splitText[16];role 3;no;]
+$endif
+$if[$splitText[17]!=]
+$addSelectMenuOption[Roles;$splitText[17];role17-$authorID-$splitText[17];role 3;no;]
+$endif
+$if[$splitText[18]!=]
+$addSelectMenuOption[Roles;$splitText[18];role18-$authorID-$splitText[18];role 3;no;]
+$endif
+$if[$splitText[19]!=]
+$addSelectMenuOption[Roles;$splitText[19];role19-$authorID-$splitText[19];role 3;no;]
+$endif
+$if[$splitText[20]!=]
+$addSelectMenuOption[Roles;$splitText[20];role20-$authorID-$splitText[20];role 3;no;]
+$endif
+$if[$splitText[21]!=]
+$addSelectMenuOption[Roles;$splitText[21];role21-$authorID-$splitText[21];role 3;no;]
+$endif
+$if[$splitText[22]!=]
+$addSelectMenuOption[Roles;$splitText[22];role22-$authorID-$splitText[22];role 3;no;]
+$endif
+$if[$splitText[23]!=]
+$addSelectMenuOption[Roles;$splitText[23];role23-$authorID-$splitText[23];role 3;no;]
+$endif
+$if[$splitText[24]!=]
+$addSelectMenuOption[Roles;$splitText[24];role24-$authorID-$splitText[24];role 3;no;]
+$endif
+$if[$splitText[25]!=]
+$addSelectMenuOption[Roles;$splitText[25];role25-$authorID-$splitText[25];role 3;no;]
+$endif
+$endif
+
+$onInteraction[Roles]
+code:
+$nomention
+$textSplit[$message;-]
+ 
+$ephemeral
+$removeAllComponents
+ 
+$if[$splitText[2]!=$authorID]
+You're not the author of the select menu!
+$stop
+$endif
+ 
+ 
+$if[$splitText[1]==role1]
+1st role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role2]
+2nd role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role3]
+3rd role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role4]
+4th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role5]
+5th role ID: $roleID[$splitText[3]]
+$endif
+ 
+ 
+$if[$splitText[1]==role6]
+6th role ID: $roleID[$splitText[3]]
+$endif
+ 
+ 
+$if[$splitText[1]==role7]
+7th role ID: $roleID[$splitText[3]]
+$endif
+ 
+ 
+$if[$splitText[1]==role8]
+8th role ID: $roleID[$splitText[3]]
+$endif
+ 
+ 
+$if[$splitText[1]==role9]
+9th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role10]
+10th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role11]
+11th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role12]
+12th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role13]
+13th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role14]
+14th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role15]
+15th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role16]
+16th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role17]
+17th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role18]
+18th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role19]
+19th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role20]
+20th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role21]
+21st role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role22]
+22nd role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role23]
+23rd role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role24]
+24th role ID: $roleID[$splitText[3]]
+$endif
+ 
+$if[$splitText[1]==role25]
+25th role ID: $roleID[$splitText[3]]
+$endif
