@@ -1,0 +1,117 @@
+/info color
+opsi:
+color - text
+code:
+$nomention 
+   $var[color;$replaceText[$message[color];#;]]
+   $var[url;https://www.thecolorapi.com]
+    $if[$var[color]==]
+     $var[e;random]
+    $elseif[$var[color]==custom]
+      $newModal[thecolorapi.search;Custom color]
+      $addTextInput[color;short;Color (HEX format);0;8;no;;eg. #F936F3]
+     $stop
+    $else
+     $var[e;id?hex=$var[color]&format=json]
+    $endif
+ 
+ 
+    $ephemeral $defer
+     $try
+      $httpGet[$var[url]/$var[e]]
+      $jsonParse[$httpResult]
+     $catch
+       $addContainer[error]
+       $addTextDisplay[### Error;error]
+       $addTextDisplay[**thecolorapi™** seems to be having issues at the moment. Please try again later!;error]
+      $stop
+     $endtry
+ 
+ 
+  $addContainer[container;$json[hex;clean]]
+    $addSection[section;container]
+    $addThumbnail[https://api.alexflipnote.dev/color/image/$json[hex;clean];$json[name;value] - $json[hex;value];no;section]
+     $addTextDisplay[-# Color information;section]
+     $addTextDisplay[## **$json[name;value]**;section]
+  $addSeparator[yes;large;container]
+ 
+    $addSection[section2;container]
+     $addTextDisplay[- HEX:  **$json[hex;value]**;section2]
+     $addTextDisplay[- RGB:  **$replaceText[$json[rgb;value];rgb;]**;section2]
+    $addButtonCV2[$var[url]/id?hex=$var[color]&format=html;View on official website;link;no;;section2]
+ 
+ 
+   $addMediaGallery[gallery;container]
+   $addMediaGalleryItem[https://api.alexflipnote.dev/color/image/gradient/$json[hex;clean];Color gradients for $json[hex;value] - $json[name;value];no;gallery]
+  $addSeparator[yes;large;container]
+  $addSection[section3;container]
+   $addTextDisplay[-# *Powered by thecolorapi & alexflipnote*;section3]
+    $addButtonCV2[thecolorapi.modal;Search another color;secondary;no;;section3]
+
+$onInteraction
+code:
+$nomention 
+$if[$checkContains[$customID;thecolorapi]==false]
+ $stop
+$endif
+ 
+ 
+   $if[$checkContains[$customID;.modal]]
+     $newModal[thecolorapi.search;Custom color]
+     $addTextInput[color;short;Color (HEX format);0;8;no;;eg. #F936F3]
+    $stop
+   $endif
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+$if[$checkContains[$customID;.search]]
+$ephemeral $defer  
+ $var[color;$replaceText[$input[color];#;]]
+   $if[$and[$var[color]!=;$isValidHex[$var[color]]==false]]
+     $addContainer[error]
+     $addTextDisplay[### Error;error]
+     $addTextDisplay[**$var[color]** is not a valid color in HEX format!;error]
+    $stop
+   $endif
+ 
+    $var[e;$var[color]]
+    $if[$var[e]==]
+     $var[e;random]
+    $endif
+  $var[url;https://www.thecolorapi.com]
+  $var[e;id?hex=$var[e]&format=json]
+    $try
+     $httpGet[$var[url]/$var[e]]
+     $jsonParse[$httpResult]
+    $catch
+      $addContainer[error]
+      $addTextDisplay[### Error;error]
+      $addTextDisplay[**thecolorapi™** seems to be having issues at the moment. Please try again later!;error]
+     $stop
+    $endtry
+ 
+ 
+  $addContainer[container;$json[hex;clean]]
+    $addSection[section;container]
+    $addThumbnail[https://api.alexflipnote.dev/color/image/$json[hex;clean];$json[name;value] - $json[hex;value];no;section]
+     $addTextDisplay[-# Color information;section]
+     $addTextDisplay[## **$json[name;value]**;section]
+  $addSeparator[yes;large;container]
+ 
+    $addSection[section2;container]
+     $addTextDisplay[- HEX:  **$json[hex;value]**;section2]
+     $addTextDisplay[- RGB:  **$replaceText[$json[rgb;value];rgb;]**;section2]
+    $addButtonCV2[$var[url]/id?hex=$var[color]&format=html;View on official website;link;no;;section2]
+ 
+ 
+   $addMediaGallery[gallery;container]
+   $addMediaGalleryItem[https://api.alexflipnote.dev/color/image/gradient/$json[hex;clean];Color gradients for $json[hex;value] - $json[name;value];no;gallery]
+  $addSeparator[yes;large;container]
+  $addSection[section3;container]
+   $addTextDisplay[-# *Powered by thecolorapi & alexflipnote*;section3]
+    $addButtonCV2[thecolorapi.modal;Search another color;secondary;no;;section3]
+$endif
