@@ -1,0 +1,269 @@
+/list server
+code:
+$nomention
+$c[--- Access Control ---]
+$c[Ensures only the bot owner can run this command. Replace $botOwnerID with specific IDs for a team.]
+$onlyIf[$authorID==$botOwnerID;This command is restricted to the Bot Owner only.]
+ 
+$allowUserMentions[] $reply $defer
+ 
+$c[--- Here P = Current Page ---]
+$var[P;1] $addContainer[c] $enableDecimals[yes]
+ 
+$c[--- Data Collection ---]
+$c[Fetches all server names, splits them into a list, and assigns up to 7 server IDs to variables based on the current page.]
+$textSplit[$serverNames[-1;
+];
+] 
+$var[1;$guildID[$splitText[$calculate[($var[P]*7)-6]]]] 
+$var[2;$guildID[$splitText[$calculate[($var[P]*7)-5]]]] 
+$var[3;$guildID[$splitText[$calculate[($var[P]*7)-4]]]] 
+$var[4;$guildID[$splitText[$calculate[($var[P]*7)-3]]]] 
+$var[5;$guildID[$splitText[$calculate[($var[P]*7)-2]]]] 
+$var[6;$guildID[$splitText[$calculate[($var[P]*7)-1]]]] 
+$var[7;$guildID[$splitText[$calculate[($var[P]*7)]]]]
+ 
+$c[--- PAGINATION LOGIC ---]
+$c[Calculates the total number of pages (mPage) by dividing total servers by 7 and rounding up.]
+$if[$checkContains[$divide[$getTextSplitLength;7];.]]
+  $var[mPage;$sum[1;$floor[$divide[$getTextSplitLength;7]]]]
+$else
+  $var[mPage;$divide[$getTextSplitLength;7]]
+$endif
+ 
+$c[--- HEADER DISPLAY ---]
+$addTextDisplay[**Server List**
+-# Page $var[P] of $var[mPage]・$getTextSplitLength Servers;c]
+ 
+$addSeparator[yes;small;c]
+ 
+$c[--- SERVER ENTRIES ---]
+$c[The following blocks repeat 7 times. They check if a server exists for that slot and display Name, ID, and Owner.]
+ 
+$c[Entry 1]
+$addSection[s;c]
+  $addTextDisplay[$serverName[$var[1]] ($var[1])
+-# ╰ <@$serverOwner[$var[1]]> ($username[$serverOwner[$var[1]]])
+;s]
+  $addButtonCV2[serverInfo-$authorID-$var[1];ⓘ;secondary;no;;s]
+ 
+$if[$var[2]!=] $addSeparator[no;small;c]
+ 
+$c[Entry 2]
+$addSection[s2;c]
+  $addTextDisplay[$serverName[$var[2]] ($var[2])
+-# ╰ <@$serverOwner[$var[2]]> ($username[$serverOwner[$var[2]]])
+;s2]
+  $addButtonCV2[serverInfo-$authorID-$var[2];ⓘ;secondary;no;;s2]
+ 
+$endif $if[$var[3]!=] $addSeparator[no;small;c]
+ 
+$c[Entry 3]
+$addSection[s3;c]
+  $addTextDisplay[$serverName[$var[3]] ($var[3])
+-# ╰ <@$serverOwner[$var[3]]> ($username[$serverOwner[$var[3]]])
+;s3]
+  $addButtonCV2[serverInfo-$authorID-$var[3];ⓘ;secondary;no;;s3]
+ 
+$endif $if[$var[4]!=]$addSeparator[no;small;c]
+ 
+$c[Entry 4]
+$addSection[s4;c]
+  $addTextDisplay[$serverName[$var[4]] ($var[4])
+-# ╰ <@$serverOwner[$var[4]]> ($username[$serverOwner[$var[4]]])
+;s4]
+  $addButtonCV2[serverInfo-$authorID-$var[4];ⓘ;secondary;no;;s4]
+ 
+$endif $if[$var[5]!=]$addSeparator[no;small;c]
+ 
+$c[Entry 5]
+$addSection[s5;c]
+  $addTextDisplay[$serverName[$var[5]] ($var[5])
+-# ╰ <@$serverOwner[$var[5]]> ($username[$serverOwner[$var[5]]])
+;s5]
+  $addButtonCV2[serverInfo-$authorID-$var[5];ⓘ;secondary;no;;s5]
+ 
+$endif $if[$var[6]!=] $addSeparator[no;small;c]
+ 
+$c[Entry 6]
+$addSection[s6;c]
+  $addTextDisplay[$serverName[$var[6]] ($var[6])
+-# ╰ <@$serverOwner[$var[6]]> ($username[$serverOwner[$var[6]]])
+;s6]
+  $addButtonCV2[serverInfo-$authorID-$var[6];ⓘ;secondary;no;;s6]
+ 
+$endif $if[$var[7]!=] $addSeparator[no;small;c]
+ 
+$c[Entry 7]
+$addSection[s7;c]
+  $addTextDisplay[$serverName[$var[7]] ($var[7])
+-# ╰ <@$serverOwner[$var[7]]> ($username[$serverOwner[$var[7]]])
+;s7]
+  $addButtonCV2[serverInfo-$authorID-$var[7];ⓘ;secondary;no;;s7]
+ 
+$endif $addSeparator[yes;large;c]
+ 
+$c[--- NAVIGATION BUTTONS ---]
+$c[Creates the Footer buttons: First, Previous, Next, and Last.]
+$addActionRow[r2;c]
+  $addButtonCV2[serverList-$authorID-1-F;|<;secondary;no;;r2]
+  $addButtonCV2[serverList-$authorID-$sub[$var[P];1];<;secondary;no;;r2]
+  $addButtonCV2[serverList-$authorID-$sum[$var[P];1];>;secondary;no;;r2] 
+  $addButtonCV2[serverList-$authorID-$var[mPage]-L;>|;secondary;no;;r2]
+
+$onInteraction
+code:
+$c[This section triggers when the author clicks the navigation buttons (|<, <, >, >|).]
+$if[$checkContains[$customID;serverList-$authorID]]   $allowUserMentions[] $defer $removeAllComponents
+    
+$c[Extracts the page number from the button's custom ID.]
+    $textSplit[$customID;-] $var[P;$splitText[3]] $addContainer[c]
+    
+$try
+    $c[Fetches all server names and assigns up to 7 IDs based on current page 'P'.]
+        $textSplit[$serverNames[-1;
+];
+] 
+        $var[1;$guildID[$splitText[$calculate[($var[P]*7)-6]]]] 
+        $var[2;$guildID[$splitText[$calculate[($var[P]*7)-5]]]] 
+        $var[3;$guildID[$splitText[$calculate[($var[P]*7)-4]]]] 
+        $var[4;$guildID[$splitText[$calculate[($var[P]*7)-3]]]] 
+        $var[5;$guildID[$splitText[$calculate[($var[P]*7)-2]]]] 
+        $var[6;$guildID[$splitText[$calculate[($var[P]*7)-1]]]] 
+        $var[7;$guildID[$splitText[$calculate[($var[P]*7)]]]]
+ 
+        $onlyIf[$var[1]!=;] 
+ 
+    $c[Logic to calculate the total number of pages available.]
+        $if[$checkContains[$divide[$getTextSplitLength;7];.]]
+          $var[mPage;$sum[1;$floor[$divide[$getTextSplitLength;7]]]]
+        $else
+          $var[mPage;$divide[$getTextSplitLength;7]]
+        $endif
+        
+        $addTextDisplay[**Server List**
+-# Page $var[P] of $var[mPage]・$getTextSplitLength Servers;c]
+        
+        $addSeparator[yes;small;c]
+        
+$c[--- ENTRY SECTIONS ---]
+  $c[Repeating blocks: Displays Server Name, ID, Owner, and a 'more info' button.]
+ 
+        $addSection[s;c]
+          $addTextDisplay[$serverName[$var[1]] ($var[1])
+-# ╰ <@$serverOwner[$var[1]]> ($username[$serverOwner[$var[1]]])
+;s]
+          $addButtonCV2[serverInfo-$authorID-$var[1];ⓘ;secondary;no;;s]
+        
+  $c[Entries 2 through 7 only appear if a server exists for that slot.]
+        $if[$var[2]!=] $addSeparator[no;small;c]
+        $addSection[s2;c]
+          $addTextDisplay[$serverName[$var[2]] ($var[2])
+-# ╰ <@$serverOwner[$var[2]]> ($username[$serverOwner[$var[2]]])
+;s2]
+          $addButtonCV2[serverInfo-$authorID-$var[2];ⓘ;secondary;no;;s2]
+        
+        $endif $if[$var[3]!=] $addSeparator[no;small;c]
+ 
+        $addSection[s3;c]
+          $addTextDisplay[$serverName[$var[3]] ($var[3])
+-# ╰ <@$serverOwner[$var[3]]> ($username[$serverOwner[$var[3]]])
+;s3]
+          $addButtonCV2[serverInfo-$authorID-$var[3];ⓘ;secondary;no;;s3]
+        
+        $endif $if[$var[4]!=]$addSeparator[no;small;c]
+ 
+        $addSection[s4;c]
+          $addTextDisplay[$serverName[$var[4]] ($var[4])
+-# ╰ <@$serverOwner[$var[4]]> ($username[$serverOwner[$var[4]]])
+;s4]
+          $addButtonCV2[serverInfo-$authorID-$var[4];ⓘ;secondary;no;;s4]
+        
+        $endif $if[$var[5]!=]$addSeparator[no;small;c]
+ 
+        $addSection[s5;c]
+          $addTextDisplay[$serverName[$var[5]] ($var[5])
+-# ╰ <@$serverOwner[$var[5]]> ($username[$serverOwner[$var[5]]])
+;s5]
+          $addButtonCV2[serverInfo-$authorID-$var[5];ⓘ;secondary;no;;s5]
+        
+        $endif $if[$var[6]!=] $addSeparator[no;small;c]
+ 
+        $addSection[s6;c]
+          $addTextDisplay[$serverName[$var[6]] ($var[6])
+-# ╰ <@$serverOwner[$var[6]]> ($username[$serverOwner[$var[6]]])
+;s6]
+          $addButtonCV2[serverInfo-$authorID-$var[6];ⓘ;secondary;no;;s6]
+        
+        $endif $if[$var[7]!=] $addSeparator[no;small;c]
+ 
+        $addSection[s7;c]
+          $addTextDisplay[$serverName[$var[7]] ($var[7])
+-# ╰ <@$serverOwner[$var[7]]> ($username[$serverOwner[$var[7]]])
+;s7]
+          $addButtonCV2[serverInfo-$authorID-$var[7];ⓘ;secondary;no;;s7]
+        
+        $endif $addSeparator[yes;large;c]
+        
+  $c[Bottom navigation buttons.]
+        $addActionRow[r2;c]
+          $addButtonCV2[serverList-$authorID-1-F;|<;secondary;no;;r2]
+          $addButtonCV2[serverList-$authorID-$sub[$var[P];1];<;secondary;no;;r2]
+          $addButtonCV2[serverList-$authorID-$sum[$var[P];1];>;secondary;no;;r2] 
+          $addButtonCV2[serverList-$authorID-$var[mPage]-L;>|;secondary;no;;r2]
+        
+    $catch $ephemeral
+        $addTextDisplay[Uh oh! Page not found.;c]
+    $endtry
+$endif
+ 
+ 
+ 
+$c[--- SERVER INFO DISPLAY ---]
+  $c[Triggers when the ⓘ button is clicked by the author.]
+$if[$checkContains[$customID;serverInfo-$authorID]==true] 
+    $textSplit[$customID;-]
+    $var[id;$splitText[3]] $ephemeral $removeAllComponents
+    
+    $author[$serverName[$var[id]] ($var[id])] $authorIcon[$serverIcon[$var[id]]]
+    $description[**Owner:** <@$serverOwner[$var[id]]> (@$username[$serverOwner[$var[id]]])
+**Creation Date:** $creationDate[$var[id]] $if[$serverDescription[$var[id]]!=]
+    
+$serverDescription[$var[id]] $endif
+    
+$serverEmojis[$var[id];]
+]
+    $addButton[no;LeaveServer-$authorID-$var[id];Leave Server;danger]
+    $addButton[no;GetInvite-$authorID-$var[id];Get Invite;secondary]
+$endif
+ 
+ 
+ 
+ 
+$c[--- LEAVE SERVER ACTION ---]
+$if[$checkContains[$customID;LeaveServer-$authorID]==true] 
+    $textSplit[$customID;-]
+    $var[id;$splitText[3]] $ephemeral $removeAllComponents $addContainer[c]
+    
+    $try
+        $botLeave[$var[id]]
+        $addTextDisplay[Successfully left $serverName[$var[id]] ($var[id]).;c]
+    $catch
+        $addTextDisplay[Unable to leave - I'm not in that server.;c]
+    $endtry
+$endif
+ 
+ 
+ 
+ 
+$c[--- GET INVITE ACTION ---]
+$if[$checkContains[$customID;GetInvite-$authorID]==true] 
+    $textSplit[$customID;-]
+    $var[id;$splitText[3]] $ephemeral $removeAllComponents $addContainer[c]
+    
+    $try
+        $addTextDisplay[$getServerInvite[$var[id]];c]
+    $catch
+        $addTextDisplay[Unable to create invite link - No permissions or bot not in server.;c]
+    $endtry
+$endif
